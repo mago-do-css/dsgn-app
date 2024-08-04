@@ -6,10 +6,16 @@ RUN apt-get update && apt-get install -y \
     libzip-dev \
     unzip \
     default-mysql-client \
+    curl \
+    gnupg \
     && docker-php-ext-install pdo pdo_mysql zip
 
 # Habilitar o módulo rewrite do Apache
 RUN a2enmod rewrite
+
+# Instalar Node.js e npm
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt-get install -y nodejs
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
