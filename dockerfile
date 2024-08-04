@@ -13,9 +13,13 @@ RUN apt-get update && apt-get install -y \
 # Habilitar o módulo rewrite do Apache
 RUN a2enmod rewrite
 
-# Instalar Node.js e npm
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+# Instalar Node.js e npm usando o NodeSource
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs
+
+# Verificar a instalação do Node.js e npm
+RUN node -v \
+    && npm -v
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
@@ -26,6 +30,15 @@ WORKDIR /var/www/html
 
 # Instalar dependências do Laravel
 #RUN composer install --no-dev --optimize-autoloader
+
+# Instalar dependências do npm
+RUN npm install
+
+# Instalar Tailwind CSS e outras dependências
+RUN npm install -D tailwindcss postcss autoprefixer
+
+# Inicializar o Tailwind CSS (se não houver arquivo de configuração)
+RUN npx tailwindcss init
 
 # Ajustar permissões
 RUN chown -R www-data:www-data /var/www/html
