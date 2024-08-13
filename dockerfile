@@ -1,53 +1,41 @@
-# Usar a imagem oficial do PHP 8.3 com Apache
-FROM php:8.3-apache
+# Usando a imagem oficial do PHP 8.2 com Apache
+FROM php:8.2-apache
 
-# Instalar extensões necessárias e utilitários
+# Instala pacotes adicionais necessários
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    zip \
     unzip \
-    default-mysql-client \
+    git \
     curl \
-    gnupg \
-    && docker-php-ext-install pdo pdo_mysql zip
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install gd mbstring mysqli pdo pdo_mysql xml
 
-# Habilitar o módulo rewrite do Apache
+# Habilita módulos do Apache necessários
 RUN a2enmod rewrite
 
-# Instalar Node.js e npm usando o NodeSource
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
-
-# Verificar a instalação do Node.js e npm
-RUN node -v \
-    && npm -v
-
-# Instalar Composer
+# Instala o Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurar o Apache e copiar o código do aplicativo
-COPY . /var/www/html/
-WORKDIR /var/www/html
+# Definir o DocumentRoot para a pasta public
+ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 
-# Instalar dependências do Laravel
-#RUN composer install --no-dev --optimize-autoloader
-
-# Instalar dependências do npm
-RUN npm install
-
-# Instalar Tailwind CSS e outras dependências
-RUN npm install -D tailwindcss postcss autoprefixer
-
-# Inicializar o Tailwind CSS (se não houver arquivo de configuração)
-RUN npx tailwindcss init
-
-# Ajustar permissões
-RUN chown -R www-data:www-data /var/www/html
-RUN chmod -R 775 /var/www/html
-
-# Configurar o diretório público
-ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
+# Ajustar o arquivo de configuração padrão do Apache para usar a pasta public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# Expor a porta 80 (não necessário na prática, mas é uma boa prática documentar)
+# Copia o código da aplicação para o diretório padrão do Apache
+COPY . /var/www/html
+
+# Ajusta as permissões
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
+
+# Expondo a porta padrão do Apache
 EXPOSE 80
+
+# Inicia o Apache
+CMD ["apache2-foreground"]
