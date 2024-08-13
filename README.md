@@ -64,3 +64,20 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+Para rodar o projeto siga todas as etapas:
+
+1. Crie o container
+
+docker-compose up -d
+
+Será liberada a porta localhost:8080
+
+2. Instalar o npm
+ npm install
+
+3. Execute o npm run dev para ativar o tailwindcss
+
+4. acesse o localhost:8080
+
