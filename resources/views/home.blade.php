@@ -9,7 +9,7 @@
 </head>
 <body>
     <h1 class="bg-gray-900 white text-3xl font-bold underline">
-        Hello world!
+        página home
       </h1>
 </body>
 </html>
