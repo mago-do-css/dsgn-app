@@ -29,10 +29,10 @@ class OrderController extends Controller
 
     public function downloadImagesAtFreepik(Request $request)
     {
-        dd($request->shutter_url);
+        dd($request->freepik_url);
 
         $data = [
-            'url' => $request->shutter_url,
+            'url' => $request->freepik_url,
             // seu array de dados aqui
         ];
 
