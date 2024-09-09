@@ -18,6 +18,9 @@
                     <x-nav-link :href="route('shutter')" :active="request()->routeIs('shutter')">
                         {{ __('Shutterstock') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('freepik')" :active="request()->routeIs('freepik')">
+                        {{ __('Freepik') }}
+                    </x-nav-link>
                 </div>
             </div>
 
