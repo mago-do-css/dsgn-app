@@ -21,7 +21,12 @@ Route::get('/shutter', function () {
     return view('shutter');
 })->middleware(['auth', 'verified'])->name('shutter');
 
+Route::get('/freepik', function(){
+    return view('freepik');
+})->middleware(['auth', 'verified'])->name('freepik');
+
 Route::post('/sending-shutter', [OrderController::class, 'downloadImagesAtShutter'])->name('sendShutter');
+Route::post('/sending-freepik', [OrderController::class, 'downloadImagesAtFreepik'])->name('sendFreepik');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
