@@ -46,4 +46,24 @@ class OrderController extends Controller
         // Processar a resposta conforme necessário
         return $responseBody;
     }
+
+    public function downloadImagesAtiStock(Request $request)
+    {
+        dd($request->istock_url);
+
+        $data = [
+            'url' => $request->istock_url,
+            // seu array de dados aqui
+        ];
+
+        $client = new Client();
+        $response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
+            'json' => $data
+        ]);
+
+        $responseBody = json_decode($response->getBody(), true);
+
+        // Processar a resposta conforme necessário
+        return $responseBody;
+    }
 }
