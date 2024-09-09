@@ -77,7 +77,11 @@ Será liberada a porta localhost:8080
 2. Instalar o npm
  npm install
 
-3. Execute o npm run dev para ativar o tailwindcss
+3. Instalar o flowbite
+
+npm install flowbite 
+
+
+3. Execute: npm run dev para ativar o tailwindcss
 
 4. acesse o localhost:8080
-
