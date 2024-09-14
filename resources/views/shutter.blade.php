@@ -13,31 +13,36 @@
 <script type="text/javascript">
     function downloadImage(keyForm, isPreview) { 
 
-        //seleciona a div que contem as imagens para remover a imagem padrão pois será trocada pela imagem do preview
+        //Seleciona a div que contem as imagens para remover a imagem padrão pois será trocada pela imagem do preview
         let contentFile = document.getElementById("content-file-"+keyForm);
         contentFile.innerHTML = '';
         
         let gifMessage = document.getElementById("gif-message-"+keyForm); 
          
-        //selecionar o container do gif e exibir ele ao iniciar a busca pelo preview
+        //Selecionar o container do gif e exibir ele ao iniciar a busca pelo preview
         let previewContainer = document.getElementById("container-file-gif-"+keyForm);
         previewContainer.classList.remove('hidden');
            
         gifMessage.innerHTML = isPreview ? "Carregando Preview..." : "Baixando Imagem...";   
       
-        //inicia a requisição
+        //Inicia a requisição
         const xhttp = new XMLHttpRequest();
         
-        //define a rota 
+        //Define a rota 
         const actionUrl = @json(route('sendShutter'));
         
+        //Busca os dados do formulário
         let form = document.querySelector('#form-shutter-' + keyForm);
         let csrfToken = form.querySelector('input[name="_token"]').value;
-        let inputUrl = document.querySelector('input[name="stock_url"]').value;
-        console.log(inputUrl);
+        let inputUrl = document.querySelector('input[name="stock_url"]');
+        let btnForm = form.querySelector('button');
+
+        //Desabilita o input e o botão após enviar a url
+        inputUrl.disabled = true;
+        btnForm.disabled = true;
 
         let data = {
-            stock_url : inputUrl,
+            stock_url : inputUrl.value,
             isPreview : isPreview ? true : false
         }
 
@@ -59,7 +64,7 @@
                 console.log(response);
 
                 // class="h-auto w-full flex"
-                let imagePreview = '<img src="{{asset('+ imagePath +')}}" alt="" />';
+                let imagePreview = '<img src=" ' + '{{asset(' + imagePath + ')}}" ' + 'alt="" />';
                 
                 gifMessage.innerHTML = '';
                 previewContainer.classList.add('hidden');
@@ -90,5 +95,17 @@
    function closeAlert(keyForm){
         let containerAlert = document.getElementById('container-box-alert-'+ keyForm);
         containerAlert.classList.add('hidden');        
+    }
+
+    function cancelDownload(keyForm){
+
+        let form = document.querySelector('#form-shutter-' + keyForm);
+        let csrfToken = form.querySelector('input[name="_token"]').value;
+        let inputUrl = document.querySelector('input[name="stock_url"]');
+        let btnForm = form.querySelector('button');
+
+
+        inputUrl.disabled = false;
+        btnForm.disabled = false;
     }
 </script>
