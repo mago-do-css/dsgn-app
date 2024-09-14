@@ -28,5 +28,10 @@ class OrderService
         //]);
         
         //$responseBody = json_decode($response->getBody(), true);
+
+        return [
+            'status'=>true,
+            'imagePath'=>'car-3d-ia.jpg'
+        ];
     } 
 }
