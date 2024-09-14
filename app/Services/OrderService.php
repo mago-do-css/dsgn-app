@@ -10,7 +10,7 @@ class OrderService
 
         return [
             'status'=>true,
-            'imagePath'=>'3d-car-preview.png'
+            'imagePath'=>'assets/images/3d-car-preview.png'
         ];
     } 
 
@@ -31,7 +31,7 @@ class OrderService
 
         return [
             'status'=>true,
-            'imagePath'=>'car-3d-ia.jpg'
+            'imagePath'=>'storage/processed_image/car-3d-ia.jpg'
         ];
     } 
 }
