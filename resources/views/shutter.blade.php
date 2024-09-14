@@ -9,8 +9,6 @@
             <x-box-link :key="$key" />
         @endfor
     </div>
-    {{-- <img src="{{asset('storage/processed_image/car-3d-ia.jpg')}}" alt="" /> --}}
-    {{-- <img class="h-auto w-full flex " src="{{ asset('assets/images/3d-car-preview.png') }}" alt=""> --}}
 </x-app-layout>
 <script type="text/javascript">
     function downloadImage(keyForm, isPreview) { 
@@ -52,23 +50,21 @@
 
         xhttp.onload = function() {
             console.log(this);
-            const response = JSON.parse(this.responseText); 
+
             let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
+            const response = JSON.parse(this.responseText); 
+            let imagePath = response.imagePath;
 
             if (this.status == 200 && response.status == true){
                 console.log(response);
 
-                let imagePreview = '<img class="h-auto w-full flex " src="{{ asset('assets/images/3d-car-preview.png') }}" alt="">';
-                let imageProcessed = '<img src="{{asset('storage/processed_image/car-3d-ia.jpg')}}" alt="" />';
+                // class="h-auto w-full flex"
+                let imagePreview = '<img src="{{asset('+ imagePath +')}}" alt="" />';
                 
                 gifMessage.innerHTML = '';
                 previewContainer.classList.add('hidden');
-            
-                if(this.stepDownload == 'preview'){
-                    contentFile.innerHTML = imagePreview;
-                }else{
-                    contentFile.innerHTML = imageProcessed;
-                }
+              
+                contentFile.innerHTML = imagePreview;
             
             }else{
                 let responseError = response.message != null ? response.message : 'Erro de servidor';
