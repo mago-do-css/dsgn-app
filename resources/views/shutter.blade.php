@@ -40,6 +40,7 @@
 
         let data = {
             stock_url : inputUrl,
+            isPreview : isPreview ? true : false
         }
 
         xhttp.open("POST", actionUrl, true);
@@ -63,7 +64,7 @@
                 gifMessage.innerHTML = '';
                 previewContainer.classList.add('hidden');
             
-                if(this.typeDownload == 'preview'){
+                if(this.stepDownload == 'preview'){
                     contentFile.innerHTML = imagePreview;
                 }else{
                     contentFile.innerHTML = imageProcessed;

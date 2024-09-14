@@ -12,6 +12,7 @@ class OrderController extends Controller
     public function downloadImagesAtShutter(Request $request)
     {
         try{
+            
             $request->validate([
                 'stock_url'=> 'required'
             ]);
@@ -25,37 +26,45 @@ class OrderController extends Controller
 
             if(Str::contains($request->stock_url, '/video/')){
                 return [
-                        'status'=> false,
-                        'message'=> 'Somente pode ser enviado imagens do ShutterStock!'
+                    'status'=> false,
+                    'message'=> 'Somente pode ser enviado imagens do ShutterStock!'
                 ];
-            
             }
 
-            //$data = [
-            //    'url' => $request->stock_url,
-            //];
-    
-            //$client = new Client();
-            //$response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
-            //    'json' => $data
-            //]);
-    
-            //$responseBody = json_decode($response->getBody(), true);
-    
-            $responseBody = [
-                'status' => true,
-                'imagePath' => 'car-3d-ia.jpg'
-            ];
+            if($request->isPreview){
+                //chamar o serviço de busca do preview na api do nohat
+                $responseBody = [
+                    'status' => true,
+                    'imagePath' => '3d-car-preview.png'
+                ];
+            }else{
+                //$data = [
+                //    'url' => $request->stock_url,
+                //];
+                
+                //$client = new Client();
+                //$response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
+                //    'json' => $data
+                //]);
+                
+                //$responseBody = json_decode($response->getBody(), true);
+                
+                $responseBody = [
+                    'status' => true,
+                    'imagePath' => 'car-3d-ia.jpg'
+                ];
+            }
+
+            
 
             return $responseBody;
 
 
         }catch(Exception $e){
-            return back()->withErrors(
-            [
-                'status'=>false,
-                'message'=>'Campo da URL não pode ser vazio.'
-            ]);
+            return [
+                'status' => false,
+                'message'=> 'Campo da URL não pode ser vazio.'
+            ];
         }  
     }
 
