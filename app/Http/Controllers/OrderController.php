@@ -48,18 +48,16 @@ class OrderController extends Controller
                 ];
             }else{
                
-                
+                $getFilePath = $this->orderService->getStockByUrl($request->stock_url);
+
                 $responseBody = [
-                    'status' => true,
-                    'imagePath' => 'car-3d-ia.jpg'
+                    'status' => $getFilePath['status'],
+                    'imagePath' => $getFilePath['imagePath']
                 ];
             }
 
-            
-
             return $responseBody;
-
-
+            
         }catch(Exception $e){
             return [
                 'status' => false,
