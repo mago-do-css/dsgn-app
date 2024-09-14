@@ -52,11 +52,11 @@
         xhttp.onload = function() {
             console.log(this);
             const response = JSON.parse(this.responseText); 
+            let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
 
             if (this.status == 200 && response.status == true){
                 console.log(response);
 
-                let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
                 let imagePreview = '<img class="h-auto w-full flex " src="{{ asset('assets/images/3d-car-preview.png') }}" alt="">';
                 let imageProcessed = '<img src="{{asset('storage/processed_image/car-3d-ia.jpg')}}" alt="" />';
                 
@@ -78,6 +78,9 @@
                 
                 let containerAlert = document.getElementById('container-box-alert-'+ keyForm);
                 containerAlert.classList.remove('hidden');
+
+                previewContainer.classList.add('hidden');
+                contentFile.innerHTML = imageDefaultHTML;
             }
         }
 
