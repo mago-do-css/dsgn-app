@@ -2,29 +2,61 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
     public function downloadImagesAtShutter(Request $request)
     {
-        dd($request->shutter_url);
+        try{
+            $request->validate([
+                'stock_url'=> 'required'
+            ]);
 
-        $data = [
-            'url' => $request->shutter_url,
-            // seu array de dados aqui
-        ];
+            if(!Str::contains($request->stock_url, 'shutterstock')){
+                return [
+                    'status'=>false,
+                    'message'=>'Somente pode ser enviado URLs do ShutterStock!'
+                ];
+            }
 
-        $client = new Client();
-        $response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
-            'json' => $data
-        ]);
+            if(Str::contains($request->stock_url, '/video/')){
+                return [
+                        'status'=> false,
+                        'message'=> 'Somente pode ser enviado imagens do ShutterStock!'
+                ];
+            
+            }
 
-        $responseBody = json_decode($response->getBody(), true);
+            //$data = [
+            //    'url' => $request->stock_url,
+            //];
+    
+            //$client = new Client();
+            //$response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
+            //    'json' => $data
+            //]);
+    
+            //$responseBody = json_decode($response->getBody(), true);
+    
+            $responseBody = [
+                'status' => true,
+                'imagePath' => 'car-3d-ia.jpg'
+            ];
 
-        // Processar a resposta conforme necessário
-        return $responseBody;
+            return $responseBody;
+
+
+        }catch(Exception $e){
+            return back()->withErrors(
+            [
+                'status'=>false,
+                'message'=>'Campo da URL não pode ser vazio.'
+            ]);
+        }  
     }
 
     public function downloadImagesAtFreepik(Request $request)
