@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\OrderService;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -9,6 +10,12 @@ use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
+    protected $orderService;
+
+    public function __construct(OrderService $orderService){
+        $this->orderService = $orderService;
+    }
+
     public function downloadImagesAtShutter(Request $request)
     {
         try{
@@ -33,21 +40,14 @@ class OrderController extends Controller
 
             if($request->isPreview){
                 //chamar o serviço de busca do preview na api do nohat
+                $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url);
+
                 $responseBody = [
-                    'status' => true,
-                    'imagePath' => '3d-car-preview.png'
+                    'status' => $getPreview['status'],
+                    'imagePath' => $getPreview['imagePath']
                 ];
             }else{
-                //$data = [
-                //    'url' => $request->stock_url,
-                //];
-                
-                //$client = new Client();
-                //$response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
-                //    'json' => $data
-                //]);
-                
-                //$responseBody = json_decode($response->getBody(), true);
+               
                 
                 $responseBody = [
                     'status' => true,
