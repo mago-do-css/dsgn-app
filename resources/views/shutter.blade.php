@@ -33,8 +33,9 @@
         
         //Busca os dados do formulário
         let form = document.querySelector('#form-shutter-' + keyForm);
+
         let csrfToken = form.querySelector('input[name="_token"]').value;
-        let inputUrl = document.querySelector('input[name="stock_url"]');
+        let inputUrl = form.querySelector('input[name="stock_url"]');
         let btnForm = form.querySelector('button');
 
         //Desabilita o input e o botão após enviar a url
@@ -61,10 +62,11 @@
             let imagePath = response.imagePath;
 
             if (this.status == 200 && response.status == true){
-                console.log(response);
+                console.log(imagePath);
 
-                // class="h-auto w-full flex"
-                let imagePreview = '<img src=" ' + '{{asset(' + imagePath + ')}}" ' + 'alt="" />';
+                // class="h-auto w-full flex"  
+                let baseUrl = "{{ asset('storage/processed_image/') }}"; 
+                let imagePreview = '<img src="' + baseUrl + '/' + imagePath + '" alt="" />'; 
                 
                 gifMessage.innerHTML = '';
                 previewContainer.classList.add('hidden');
@@ -93,17 +95,24 @@
 </script>
 <script>
    function closeAlert(keyForm){
+        let form = document.querySelector('#form-shutter-' + keyForm); 
+        let inputUrl = form.querySelector('input[name="stock_url"]');
+        let btnForm = form.querySelector('button');
+
         let containerAlert = document.getElementById('container-box-alert-'+ keyForm);
         containerAlert.classList.add('hidden');        
+
+        inputUrl.disabled = false;
+        btnForm.disabled = false;
     }
 
     function cancelDownload(keyForm){
 
-        let form = document.querySelector('#form-shutter-' + keyForm);
-        let csrfToken = form.querySelector('input[name="_token"]').value;
-        let inputUrl = document.querySelector('input[name="stock_url"]');
+        let form = document.querySelector('#form-shutter-' + keyForm); 
+        let inputUrl = form.querySelector('input[name="stock_url"]');
         let btnForm = form.querySelector('button');
 
+        console.log(form);
 
         inputUrl.disabled = false;
         btnForm.disabled = false;

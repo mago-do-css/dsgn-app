@@ -7,10 +7,10 @@ class OrderService
     // adicionar o parametro $bancoImagem
     public function getPreviewStockByUrl($url)
     { 
-
+        
         return [
             'status'=>true,
-            'imagePath'=>'assets/images/3d-car-preview.png'
+            'imagePath'=>'3d-car-preview.png'
         ];
     } 
 

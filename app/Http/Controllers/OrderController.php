@@ -19,7 +19,8 @@ class OrderController extends Controller
     public function downloadImagesAtShutter(Request $request)
     {
         try{
-            
+             
+            // validando a requisição
             $request->validate([
                 'stock_url'=> 'required'
             ]);
@@ -38,6 +39,8 @@ class OrderController extends Controller
                 ];
             }
 
+
+            //verifica se é preview ou download
             if($request->isPreview){
                 //chamar o serviço de busca do preview na api do nohat
                 $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url);
@@ -57,7 +60,7 @@ class OrderController extends Controller
             }
 
             return $responseBody;
-            
+
         }catch(Exception $e){
             return [
                 'status' => false,
