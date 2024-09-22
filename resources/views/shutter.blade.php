@@ -4,68 +4,146 @@
             {{ __('Shutterstock') }}
         </h2>
     </x-slot>
-
     <div class="max-w-7xl mx-auto">
-        <div class="py-10 flex items-end sm:px-6 lg:px-8">
-            {{-- <img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/shutterimg.jpeg') }}"
-                alt="image description"> --}}
-                {{-- <div class="flex items-center justify-center h-[275px] w-[600px] border border-gray-200 rounded-lg bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-                    <div role="status">
-                        <div class="px-3 py-1 text-xs font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">Carregando Preview...</div>
-                    </div>
-                </div>     --}}
-            <img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="image description">
-
-            <div class="sm:px-6 lg:px-8 w-full">
-                <div class="w-full max-w-full mx-auto">
-                    <div class="mb-2 flex justify-between items-center">
-                        <label for="website-url" class="text-sm font-medium text-gray-900 dark:text-white">Verify your
-                            website:</label>
-                    </div>
-                    <form class="flex items-center" action="{{ route('sendShutter') }}" method="POST">
-                        @csrf
-                        <span
-                            class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg dark:bg-gray-600 dark:text-white dark:border-gray-600">URL</span>
-                        <div class="relative w-full">
-                            <!-- Removed 'readonly' and 'disabled' attributes from the input field -->
-                            <input id="shutter_url" name="shutter_url" type="text"
-                                aria-describedby="helper-text-explanation"
-                                class="bg-gray-50 border border-e-0 border-gray-300 text-gray-900 dark:text-white text-sm border-s-0 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="https://www.shutterstock.com/pt/" />
-                        </div>
-                        <button data-tooltip-target="tooltip-website-url" data-copy-to-clipboard-target="website-url"
-                            class="flex-shrink-0 z-10 inline-flex items-center py-3 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-e-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 border border-blue-700 dark:border-blue-600 hover:border-blue-800 dark:hover:border-blue-700"
-                            type="submit">
-                            <span id="default-icon">
-                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 16 16">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 8h11m0 0-4-4m4 4-4 4m-5 3H3a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h3">
-                                    </path>
-                                </svg>
-                            </span>
-                            <span id="success-icon" class="hidden inline-flex items-center">
-                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                    fill="none" viewBox="0 0 16 12">
-                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                        stroke-width="2" d="M1 5.917 5.724 10.5 15 1.5" />
-                                </svg>
-                            </span>
-                        </button>
-                        {{-- <button type="submit"></button> --}}
-                        <div id="tooltip-website-url" role="tooltip"
-                            class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700">
-                            <span id="default-tooltip-message">Copy link</span>
-                            <span id="success-tooltip-message" class="hidden">Copied!</span>
-                            <div class="tooltip-arrow" data-popper-arrow></div>
-                        </div>
-                    </form>
-                    <p id="helper-text-explanation" class="mt-2 text-sm text-gray-500 dark:text-gray-400">Security
-                        certificate is required for approval</p>
-                </div>
-            </div>
-        </div>
+        @for ($key = 1; $key <= 3; $key++)
+            <x-box-link :key="$key" />
+        @endfor
     </div>
-
 </x-app-layout>
+<script type="text/javascript">
+    function downloadImage(keyForm, isPreview) { 
+
+        //Seleciona a div que contem as imagens para remover a imagem padrão pois será trocada pela imagem do preview
+        let contentFile = document.getElementById("content-file-" + keyForm);
+        contentFile.innerHTML = '';
+        
+        let gifMessage = document.getElementById("gif-message-" + keyForm); 
+         
+        //Selecionar o container do gif e exibir ele ao iniciar a busca pelo preview
+        let previewContainer = document.getElementById("container-file-gif-" + keyForm);
+        previewContainer.classList.remove('hidden');
+           
+        gifMessage.innerHTML = isPreview ? "Carregando Preview..." : "Baixando Imagem...";   
+      
+        //Inicia a requisição
+        const xhttp = new XMLHttpRequest();
+        
+        //Define a rota 
+        const actionUrl = @json(route('sendShutter'));
+        
+        //Busca os dados do formulário
+        let form = document.querySelector('#form-shutter-' + keyForm);
+
+        let csrfToken = form.querySelector('input[name="_token"]').value;
+        let inputUrl = form.querySelector('input[name="stock_url"]');
+        let btnForm = form.querySelector('button');
+
+        //Desabilita o input e o botão após enviar a url
+        inputUrl.disabled = true;
+        btnForm.disabled = true;
+
+        let data = {
+            stock_url : inputUrl.value,
+            isPreview : isPreview ? true : false
+        }
+
+        xhttp.open("POST", actionUrl, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("X-CSRF-TOKEN", csrfToken);
+
+        const dataToSend = JSON.stringify(data);
+        xhttp.send(dataToSend);
+
+        xhttp.onload = function() {
+            console.log(this);
+
+            const response = JSON.parse(this.responseText); 
+
+            let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
+            let imagePath = response.imagePath;
+
+            if (this.status == 200 && response.status == true){
+                console.log(imagePath);
+
+                //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
+                let baseUrl = "{{ asset('storage/processed_image/') }}"; 
+                let imagePreview = '<img src="' + baseUrl + '/' + imagePath + '" alt="" />'; 
+                
+                gifMessage.innerHTML = '';
+                previewContainer.classList.add('hidden');
+              
+                contentFile.innerHTML = imagePreview;
+
+                //Exibe o card de confirmar o download
+                if(isPreview){
+                    let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
+                    cardConfirmDownload.classList.remove("hidden");
+                }else{
+                    //realiza a troca do icone do card  de donwload com sucesso!
+                    let iconCheckCardDownload = document.getElementById('card-download-icon-check-' + keyForm);
+                    let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm);
+
+                    iconCheckCardDownload.classList.remove("hidden"); 
+                    iconDownCardDownload.classList.add("hidden");
+
+                    //realiza a troca da mensagem de sucesso
+                    let titleCardDownload = document.getElementById('card-download-title-' +  keyForm);
+                    let textCardDownload = document.getElementById('card-download-text-' +  keyForm);
+
+                    titleCardDownload.innerHTML = 'Processamento Concluído!';
+                    textCardDownload.innerHTML = 'Clique no botão abaixo para baixar a imagem para o seu computador.';
+                    
+                    //disponibiliza o botão de baixar imagem para o pc
+                    let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
+                    let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                    
+                    buttonsCardDownload.classList.add("hidden");
+                    buttonFileCardDownload.classList.remove("hidden");
+                }
+            }else{
+                let responseError = response.message != null ? response.message : 'Erro de servidor';
+                console.log("Erro:" + responseError);
+
+                let alertMessage = document.getElementById('box-alert-message-'+keyForm);
+                alertMessage.innerHTML = responseError;
+                
+                let containerAlert = document.getElementById('container-box-alert-'+ keyForm);
+                containerAlert.classList.remove('hidden');
+
+                previewContainer.classList.add('hidden');
+                contentFile.innerHTML = imageDefaultHTML;
+            }
+        }
+
+        xhttp.onerror = function() {
+            console.error('Erro:'+ this.message);
+        };
+    }
+</script>
+<script>
+   function closeAlert(keyForm){
+        let form = document.querySelector('#form-shutter-' + keyForm); 
+        let inputUrl = form.querySelector('input[name="stock_url"]');
+        let btnForm = form.querySelector('button');
+
+        let containerAlert = document.getElementById('container-box-alert-'+ keyForm);
+        containerAlert.classList.add('hidden');        
+
+        inputUrl.disabled = false;
+        btnForm.disabled = false;
+    }
+
+    function cancelDownload(keyForm){
+
+        let form = document.querySelector('#form-shutter-' + keyForm); 
+        let inputUrl = form.querySelector('input[name="stock_url"]');
+        let btnForm = form.querySelector('button');
+        let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
+        cardConfirmDownload.classList.add("hidden");
+
+        console.log(form);
+
+        inputUrl.disabled = false;
+        btnForm.disabled = false;
+    }
+</script>
