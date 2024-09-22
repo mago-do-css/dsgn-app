@@ -31,7 +31,7 @@ class OrderService
 
         return [
             'status'=>true,
-            'imagePath'=>'storage/processed_image/car-3d-ia.jpg'
+            'imagePath'=>'car-3d-ia.jpg'
         ];
     } 
 }

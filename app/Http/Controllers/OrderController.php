@@ -19,7 +19,6 @@ class OrderController extends Controller
     public function downloadImagesAtShutter(Request $request)
     {
         try{
-             
             // validando a requisição
             $request->validate([
                 'stock_url'=> 'required'
@@ -38,7 +37,6 @@ class OrderController extends Controller
                     'message'=> 'Somente pode ser enviado imagens do ShutterStock!'
                 ];
             }
-
 
             //verifica se é preview ou download
             if($request->isPreview){

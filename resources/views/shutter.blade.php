@@ -14,13 +14,13 @@
     function downloadImage(keyForm, isPreview) { 
 
         //Seleciona a div que contem as imagens para remover a imagem padrão pois será trocada pela imagem do preview
-        let contentFile = document.getElementById("content-file-"+keyForm);
+        let contentFile = document.getElementById("content-file-" + keyForm);
         contentFile.innerHTML = '';
         
-        let gifMessage = document.getElementById("gif-message-"+keyForm); 
+        let gifMessage = document.getElementById("gif-message-" + keyForm); 
          
         //Selecionar o container do gif e exibir ele ao iniciar a busca pelo preview
-        let previewContainer = document.getElementById("container-file-gif-"+keyForm);
+        let previewContainer = document.getElementById("container-file-gif-" + keyForm);
         previewContainer.classList.remove('hidden');
            
         gifMessage.innerHTML = isPreview ? "Carregando Preview..." : "Baixando Imagem...";   
@@ -57,14 +57,15 @@
         xhttp.onload = function() {
             console.log(this);
 
-            let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
             const response = JSON.parse(this.responseText); 
+
+            let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
             let imagePath = response.imagePath;
 
             if (this.status == 200 && response.status == true){
                 console.log(imagePath);
 
-                // class="h-auto w-full flex"  
+                //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
                 let baseUrl = "{{ asset('storage/processed_image/') }}"; 
                 let imagePreview = '<img src="' + baseUrl + '/' + imagePath + '" alt="" />'; 
                 
@@ -72,7 +73,33 @@
                 previewContainer.classList.add('hidden');
               
                 contentFile.innerHTML = imagePreview;
-            
+
+                //Exibe o card de confirmar o download
+                if(isPreview){
+                    let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
+                    cardConfirmDownload.classList.remove("hidden");
+                }else{
+                    //realiza a troca do icone do card  de donwload com sucesso!
+                    let iconCheckCardDownload = document.getElementById('card-download-icon-check-' + keyForm);
+                    let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm);
+
+                    iconCheckCardDownload.classList.remove("hidden"); 
+                    iconDownCardDownload.classList.add("hidden");
+
+                    //realiza a troca da mensagem de sucesso
+                    let titleCardDownload = document.getElementById('card-download-title-' +  keyForm);
+                    let textCardDownload = document.getElementById('card-download-text-' +  keyForm);
+
+                    titleCardDownload.innerHTML = 'Processamento Concluído!';
+                    textCardDownload.innerHTML = 'Clique no botão abaixo para baixar a imagem para o seu computador.';
+                    
+                    //disponibiliza o botão de baixar imagem para o pc
+                    let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
+                    let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                    
+                    buttonsCardDownload.classList.add("hidden");
+                    buttonFileCardDownload.classList.remove("hidden");
+                }
             }else{
                 let responseError = response.message != null ? response.message : 'Erro de servidor';
                 console.log("Erro:" + responseError);
@@ -111,6 +138,8 @@
         let form = document.querySelector('#form-shutter-' + keyForm); 
         let inputUrl = form.querySelector('input[name="stock_url"]');
         let btnForm = form.querySelector('button');
+        let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
+        cardConfirmDownload.classList.add("hidden");
 
         console.log(form);
 
