@@ -40,7 +40,11 @@
 
         //Desabilita o input e o botão após enviar a url
         inputUrl.disabled = true;
+        inputUrl.classList.add("bg-gray-300","border-gray-300"); 
+
         btnForm.disabled = true;
+        btnForm.classList.add("bg-gray-500","border-gray-500"); 
+        
 
         let data = {
             stock_url : inputUrl.value,
@@ -60,14 +64,16 @@
             const response = JSON.parse(this.responseText); 
 
             let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
+            
             let imagePath = response.imagePath;
+            let baseUrl = "{{ asset('storage/processed_image/') }}"; 
+            let completeUrl = isPreview ? imagePath : baseUrl + '/' + imagePath;
 
             if (this.status == 200 && response.status == true){
                 console.log(imagePath);
 
                 //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
-                let baseUrl = "{{ asset('storage/processed_image/') }}"; 
-                let imagePreview = '<img src="' + baseUrl + '/' + imagePath + '" alt="" />'; 
+                let imagePreview = '<img src="' + completeUrl + '" alt="" />'; 
                 
                 gifMessage.innerHTML = '';
                 previewContainer.classList.add('hidden');
@@ -130,7 +136,10 @@
         containerAlert.classList.add('hidden');        
 
         inputUrl.disabled = false;
+        inputUrl.classList.remove("bg-gray-300","border-gray-300"); 
+
         btnForm.disabled = false;
+        btnForm.classList.remove("bg-gray-500","border-gray-500"); 
     }
 
     function cancelDownload(keyForm){
@@ -144,6 +153,9 @@
         console.log(form);
 
         inputUrl.disabled = false;
+        inputUrl.classList.remove("bg-gray-300","border-gray-300"); 
+
         btnForm.disabled = false;
+        btnForm.classList.remove("bg-gray-500","border-gray-500"); 
     }
 </script>
