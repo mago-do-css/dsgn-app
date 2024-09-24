@@ -30,7 +30,8 @@ class OrderController extends Controller
                 throw new Exception($message =  "Somente pode ser enviado imagens do ShutterStock!");
  
             if($request->isPreview){ 
-                $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url);
+                $bancoImagem ='shutterstock'; // 'istockphoto'
+                $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url, $bancoImagem);
                  
                 if(!$getPreview['status'])
                     throw new Exception($message =  $getPreview['message']);
