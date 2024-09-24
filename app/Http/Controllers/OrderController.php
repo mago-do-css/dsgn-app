@@ -18,30 +18,22 @@ class OrderController extends Controller
 
     public function downloadImagesAtShutter(Request $request)
     {
-        try{
-            // validando a requisição
+        try{ 
             $request->validate([
                 'stock_url'=> 'required'
             ]);
 
-            if(!Str::contains($request->stock_url, 'shutterstock')){
-                return [
-                    'status'=>false,
-                    'message'=>'Somente pode ser enviado URLs do ShutterStock!'
-                ];
-            }
+            if(!Str::contains($request->stock_url, 'shutterstock'))
+                throw new Exception($message =  "Somente pode ser enviado URLs do ShutterStock!");
 
-            if(Str::contains($request->stock_url, '/video/')){
-                return [
-                    'status'=> false,
-                    'message'=> 'Somente pode ser enviado imagens do ShutterStock!'
-                ];
-            }
-
-            //verifica se é preview ou download
-            if($request->isPreview){
-                //chamar o serviço de busca do preview na api do nohat
+            if(Str::contains($request->stock_url, '/video/'))
+                throw new Exception($message =  "Somente pode ser enviado imagens do ShutterStock!");
+ 
+            if($request->isPreview){ 
                 $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url);
+                 
+                if(!$getPreview['status'])
+                    throw new Exception($message =  $getPreview['message']);
 
                 $responseBody = [
                     'status' => $getPreview['status'],
@@ -62,7 +54,7 @@ class OrderController extends Controller
         }catch(Exception $e){
             return [
                 'status' => false,
-                'message'=> 'Campo da URL não pode ser vazio.'
+                'message'=> 'Erro: ' . $e->getMessage()
             ];
         }  
     }
@@ -89,21 +81,22 @@ class OrderController extends Controller
 
     public function downloadImagesAtiStock(Request $request)
     {
-        dd($request->istock_url);
+        $getPreview = $this->orderService->getPreviewStockByUrl("testeUrl");
+      dd( $getPreview );
 
-        $data = [
-            'url' => $request->istock_url,
-            // seu array de dados aqui
-        ];
-
-        $client = new Client();
-        $response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
-            'json' => $data
-        ]);
-
-        $responseBody = json_decode($response->getBody(), true);
-
+        //$data = [
+        //    'url' => $request->istock_url,
+        //    // seu array de dados aqui
+        //];
+//
+        //$client = new Client();
+        //$response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
+        //    'json' => $data
+        //]);
+//
+        //$responseBody = json_decode($response->getBody(), true);
+//
         // Processar a resposta conforme necessário
-        return $responseBody;
+        //return $responseBody;
     }
 }
