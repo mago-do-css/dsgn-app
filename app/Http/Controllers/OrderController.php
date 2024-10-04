@@ -37,7 +37,7 @@ class OrderController extends Controller
                 throw new Exception($message =  "Somente pode ser enviado imagens do ". $validatedName ."!");
  
             if($request->isPreview){ 
-                $getFile = $this->orderService->getPreviewStockByUrl($request->stock_url);
+                $getFile = $this->orderService->getPreviewStockByUrl($request->stock_url, $enum->getStockParam());
             }else{
                $getFile =  $this->orderService->getStockByUrl($request->stock_url); 
             }

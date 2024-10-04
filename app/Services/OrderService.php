@@ -10,7 +10,7 @@ class OrderService
 {
     //TODO: Verificar na api do nohat onde é possível informar o banco de imagem para reutiliar o método abaixo
     // adicionar o parametro $bancoImagem
-    public function getPreviewStockByUrl($url)    
+    public function getPreviewStockByUrl($url, $stock_param)    
     { 
         try{
             //TODO: para testar
@@ -18,7 +18,7 @@ class OrderService
 
             $encodedUrl = urlencode($url);
         
-            $endpoint = "https://vip.neh.tw/api/stockinfo/shutterstock/null?url={$encodedUrl}"; 
+            $endpoint = "https://vip.neh.tw/api/stockinfo/{$stock_param}/null?url={$encodedUrl}"; 
 
             $response = Http::withHeaders([
                 'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',

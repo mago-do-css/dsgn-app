@@ -44,4 +44,13 @@ enum BancoImagemEnum: int
      };
  }
 
+ public function getStockParam(): string
+ {
+     return match($this) {
+         self::istock => 'istock',
+         self::shutterstock => 'shutterstock',
+         self::freepik => 'freepik',
+     };
+ }
+
 } 
