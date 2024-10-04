@@ -7,6 +7,8 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use App\Enums\BancoImagemEnum;
 
 class OrderController extends Controller
 {
@@ -20,36 +22,33 @@ class OrderController extends Controller
     {
         try{ 
             $request->validate([
-                'stock_url'=> 'required'
+                'stock_url'=> 'required',
+                'image_bank'=>  [Rule::enum(BancoImagemEnum::class)],
             ]);
 
-            if(!Str::contains($request->stock_url, 'shutterstock'))
-                throw new Exception($message =  "Somente pode ser enviado URLs do ShutterStock!");
+            $enum = BancoImagemEnum::tryFrom($request->image_bank);  
 
-            if(Str::contains($request->stock_url, '/video/'))
-                throw new Exception($message =  "Somente pode ser enviado imagens do ShutterStock!");
+            $validatedName = $enum->getDescription(); 
+
+            if(!Str::contains($request->stock_url, $validatedName))
+                throw new Exception($message =  "Somente pode ser enviado URLs do ". $validatedName ."!");
+
+            if($enum->getVideoCondition() && Str::contains($request->stock_url, $enum->getVideoDescription()))
+                throw new Exception($message =  "Somente pode ser enviado imagens do ". $validatedName ."!");
  
             if($request->isPreview){ 
-                $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url);
-                 
-                if(!$getPreview['status'])
-                    throw new Exception($message =  $getPreview['message']);
-
-                $responseBody = [
-                    'status' => $getPreview['status'],
-                    'imagePath' => $getPreview['imagePath']
-                ];
+                $getFile = $this->orderService->getPreviewStockByUrl($request->stock_url);
             }else{
-               
-                $getFilePath = $this->orderService->getStockByUrl($request->stock_url);
-
-                $responseBody = [
-                    'status' => $getFilePath['status'],
-                    'imagePath' => $getFilePath['imagePath']
-                ];
+               $getFile =  $this->orderService->getStockByUrl($request->stock_url); 
             }
 
-            return $responseBody;
+            if(!$getFile['status'])
+                throw new Exception($message =  $getFile['message']);
+
+            return [
+                'status' => $getFile['status'],
+                'imagePath' => $getFile['imagePath']
+            ]; 
 
         }catch(Exception $e){
             return [
