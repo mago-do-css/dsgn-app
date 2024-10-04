@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Http;
 
 class OrderService
 {
-    //TODOS: Verificar na api do nohat onde é possível informar o banco de imagem para reutiliar o método abaixo
+    //TODO: Verificar na api do nohat onde é possível informar o banco de imagem para reutiliar o método abaixo
     // adicionar o parametro $bancoImagem
     public function getPreviewStockByUrl($url)    
     { 
         try{
-            //TODOS: para testar
+            //TODO: para testar
             //$url = "https://www.shutterstock.com/pt/image-photo/smiling-30s-latin-hispanic-middleaged-business-2491646071";
 
             $encodedUrl = urlencode($url);
