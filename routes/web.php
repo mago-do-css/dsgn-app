@@ -29,7 +29,8 @@ Route::get('/istock', function () {
     return view('istock');
 })->middleware(['auth', 'verified'])->name('istock');
 
-Route::post('/sending-shutter', [OrderController::class, 'downloadImagesAtShutter'])->name('sendShutter');
+ 
+Route::post('/sending-shutter', [OrderController::class, 'downloadImageByUrl'])->name('sendShutter');
 Route::post('/sending-freepik', [OrderController::class, 'downloadImagesAtFreepik'])->name('sendFreepik');
 Route::post('/sending-istock', [OrderController::class, 'downloadImagesAtiStock'])->name('sendiStock');
 

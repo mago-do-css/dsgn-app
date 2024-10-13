@@ -18,15 +18,19 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function downloadImagesAtShutter(Request $request)
+    public function downloadImageByUrl(Request $request)
     {
         try{ 
             $request->validate([
                 'stock_url'=> 'required',
-                'image_bank'=>  [Rule::enum(BancoImagemEnum::class)],
+                //'code_IB'=>  [Rule::enum(BancoImagemEnum::class)],
+                'isPreview'=>'required',
             ]);
 
-            $enum = BancoImagemEnum::tryFrom($request->image_bank);  
+            //TODO: separar as validações numa camada de serviço
+            //modificar o getPreviewStockByUrl para uma private function
+            //code_IB: código do image bank
+            $enum = BancoImagemEnum::tryFrom($request->code_IB);  
 
             $validatedName = $enum->getDescription(); 
 
@@ -80,8 +84,8 @@ class OrderController extends Controller
 
     public function downloadImagesAtiStock(Request $request)
     {
-        $getPreview = $this->orderService->getPreviewStockByUrl("testeUrl");
-      dd( $getPreview );
+        // $getPreview = $this->orderService->getPreviewStockByUrl("testeUrl");
+    //   dd( $getPreview );
 
         //$data = [
         //    'url' => $request->istock_url,
