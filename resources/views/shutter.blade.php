@@ -61,7 +61,17 @@
         xhttp.onload = function() {
             console.log(this);
 
-            const response = JSON.parse(this.responseText); 
+            let response;
+
+            try {
+                 response = JSON.parse(this.responseText);
+            } catch (error) {
+                // Trata o erro de JSON inválido 
+                response = {
+                    status : false,
+                    message : "Resposta do servidor está inválida. Contacte o suporte!"
+                };
+            } 
 
             let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
             
