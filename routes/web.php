@@ -6,8 +6,8 @@ use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/teste', function () {
     return view('welcome');
@@ -29,7 +29,8 @@ Route::get('/istock', function () {
     return view('istock');
 })->middleware(['auth', 'verified'])->name('istock');
 
-Route::post('/sending-shutter', [OrderController::class, 'downloadImagesAtShutter'])->name('sendShutter');
+ 
+Route::post('/sending-shutter', [OrderController::class, 'downloadImageByUrl'])->name('sendShutter');
 Route::post('/sending-freepik', [OrderController::class, 'downloadImagesAtFreepik'])->name('sendFreepik');
 Route::post('/sending-istock', [OrderController::class, 'downloadImagesAtiStock'])->name('sendiStock');
 
