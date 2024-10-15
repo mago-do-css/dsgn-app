@@ -30,7 +30,7 @@ class OrderService
                 throw new Exception($message =  "Vídeos do ". $validatedName ." somente sob demanda. Entre em contato com o suporte!");
 
         }catch(Exception $e){
-            throw new Exception('Erro: ' . $e->getMessage());
+            throw new Exception($e->getMessage());
         }     
     }
 
@@ -50,7 +50,7 @@ class OrderService
             return $getFile;
 
         }catch(Exception $e){
-            throw new Exception('Erro: ' . $e->getMessage());
+            throw new Exception($e->getMessage());
         } 
     }   
     
@@ -78,7 +78,7 @@ class OrderService
             ];
             
         }catch(Exception $e){
-            throw new Exception('Erro: ' . $e->getMessage());
+            throw new Exception( $e->getMessage());
         } 
     }  
 
@@ -87,13 +87,13 @@ class OrderService
         try{
             //Enviar os dados para a api em py realizar o download
                 
-            $urlEncode = urlencode($url);
+            // $urlEncode = urlencode($url);
 
-            $endpoint = "https://endpoint.com.br/download_stock/". $enpointStockName ."/data={$urlEncode}"; 
+            // $endpoint = "https://endpoint.com.br/download_stock/". $enpointStockName ."/data={$urlEncode}"; 
             
-            $response = Http::withHeaders([
-                'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
-            ])->get($endpoint);  
+            // $response = Http::withHeaders([
+            //     'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
+            // ])->get($endpoint);  
 
             return [
                 'status'=> true,
@@ -102,7 +102,7 @@ class OrderService
             ];
 
         }catch(Exception $e){
-            throw new Exception('Erro: ' . $e->getMessage());
+            throw new Exception($e->getMessage());
         }  
     }    
 }
