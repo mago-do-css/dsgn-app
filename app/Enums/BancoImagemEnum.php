@@ -16,25 +16,27 @@ enum BancoImagemEnum: int
             self::istock => 'istock',
             self::shutterstock => 'shutterstock',
             self::freepik => 'freepik',
+            self::envato => 'envato',
         };
     }
     public function getVideoCondition(): string
     {
         return match($this) {
-            self::istock => true,
-            self::shutterstock => true,
+            self::istock => false,
+            self::shutterstock => false,
             self::freepik => true,
+            self::envato => true, 
         };
     }
     public function getVideoDescription(): string
     {
         return match($this) {
-            self::istock => '/video/',
+            self::istock => '',
             self::shutterstock => '/video/',
-            self::freepik => '/video/',
+            self::freepik => '',
+            self::envato => '',
         };
-    }
-
+    } 
     public function getUrl(): string
     {
         return match($this) {
@@ -42,15 +44,14 @@ enum BancoImagemEnum: int
             self::shutterstock => 'https://www.shutterstock.com',
             self::freepik => 'https://www.freepik.com',
         };
-    }
-
+    } 
     public function getStockParam(): string
     {
         return match($this) {
             self::istock => 'istock',
             self::shutterstock => 'shutterstock',
             self::freepik => 'freepik',
+            self::envato => 'envato',
         };
-    }
-
+    } 
 } 
