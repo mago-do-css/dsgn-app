@@ -48,7 +48,10 @@
 
         let data = {
             stock_url : inputUrl.value,
-            isPreview : isPreview ? true : false
+            //TODO: PASSAR O CODE_IB DINAMICO
+            code_IB: 1,
+            isPreview : isPreview ? true : false,
+            
         }
 
         xhttp.open("POST", actionUrl, true);
@@ -61,7 +64,17 @@
         xhttp.onload = function() {
             console.log(this);
 
-            const response = JSON.parse(this.responseText); 
+            let response;
+
+            try {
+                 response = JSON.parse(this.responseText);
+            } catch (error) {
+                // Trata o erro de JSON inválido 
+                response = {
+                    status : false,
+                    message : "Resposta do servidor está inválida. Contacte o suporte!"
+                };
+            } 
 
             let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
             

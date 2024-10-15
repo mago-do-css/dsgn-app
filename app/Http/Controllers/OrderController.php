@@ -7,6 +7,8 @@ use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
+use App\Enums\BancoImagemEnum;
 
 class OrderController extends Controller
 {
@@ -16,40 +18,23 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function downloadImagesAtShutter(Request $request)
+    public function downloadImageByUrl(Request $request)
     {
         try{ 
             $request->validate([
-                'stock_url'=> 'required'
+                'stock_url'=> 'required',
+                'code_IB'=> [Rule::enum(BancoImagemEnum::class)],
+                'isPreview'=> 'required',
             ]);
+            
+            $this->orderService->requestValidator($request); 
 
-            if(!Str::contains($request->stock_url, 'shutterstock'))
-                throw new Exception($message =  "Somente pode ser enviado URLs do ShutterStock!");
-
-            if(Str::contains($request->stock_url, '/video/'))
-                throw new Exception($message =  "Somente pode ser enviado imagens do ShutterStock!");
- 
-            if($request->isPreview){ 
-                $getPreview = $this->orderService->getPreviewStockByUrl($request->stock_url);
-                 
-                if(!$getPreview['status'])
-                    throw new Exception($message =  $getPreview['message']);
-
-                $responseBody = [
-                    'status' => $getPreview['status'],
-                    'imagePath' => $getPreview['imagePath']
-                ];
-            }else{
-               
-                $getFilePath = $this->orderService->getStockByUrl($request->stock_url);
-
-                $responseBody = [
-                    'status' => $getFilePath['status'],
-                    'imagePath' => $getFilePath['imagePath']
-                ];
-            }
-
-            return $responseBody;
+            $getFile = $this->orderService->downloadValidator($request);
+          
+            return [
+                'status' => $getFile['status'],
+                'imagePath' => $getFile['imagePath']
+            ]; 
 
         }catch(Exception $e){
             return [
@@ -77,26 +62,5 @@ class OrderController extends Controller
 
         // Processar a resposta conforme necessário
         return $responseBody;
-    }
-
-    public function downloadImagesAtiStock(Request $request)
-    {
-        $getPreview = $this->orderService->getPreviewStockByUrl("testeUrl");
-      dd( $getPreview );
-
-        //$data = [
-        //    'url' => $request->istock_url,
-        //    // seu array de dados aqui
-        //];
-//
-        //$client = new Client();
-        //$response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
-        //    'json' => $data
-        //]);
-//
-        //$responseBody = json_decode($response->getBody(), true);
-//
-        // Processar a resposta conforme necessário
-        //return $responseBody;
-    }
+    } 
 }
