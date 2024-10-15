@@ -9,30 +9,18 @@ Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/teste', function () {
-    return view('welcome');
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('/shutter', 'shutter')->name('shutter');
+    Route::view('/freepik', 'freepik')->name('freepik');
+    Route::view('/istock', 'istock')->name('istock');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::get('/shutter', function () {
-    return view('shutter');
-})->middleware(['auth', 'verified'])->name('shutter');
-
-Route::get('/freepik', function () {
-    return view('freepik');
-})->middleware(['auth', 'verified'])->name('freepik');
-
-Route::get('/istock', function () {
-    return view('istock');
-})->middleware(['auth', 'verified'])->name('istock');
-
- 
-Route::post('/sending-shutter', [OrderController::class, 'downloadImageByUrl'])->name('sendShutter');
-Route::post('/sending-freepik', [OrderController::class, 'downloadImagesAtFreepik'])->name('sendFreepik');
-Route::post('/sending-istock', [OrderController::class, 'downloadImagesAtiStock'])->name('sendiStock');
+Route::prefix('sending')->group(function () {
+    Route::post('/shutter', [OrderController::class, 'downloadImagesAtShutter'])->name('sendShutter');
+    Route::post('/freepik', [OrderController::class, 'downloadImagesAtFreepik'])->name('sendFreepik');
+    Route::post('/istock', [OrderController::class, 'downloadImagesAtiStock'])->name('sendiStock');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
