@@ -72,9 +72,9 @@
                             <span id="card-download-title-{{$key}}" class="mb-1 text-sm font-semibold text-gray-900">Deseja baixar o arquivo?</span>
                             <div id="card-download-text-{{$key}}" class="mb-2 text-sm font-normal">Confirme o download do seu arquivo.
                             </div>
-                            <div id="card-download-buttons-{{$key}}" class="grid grid-cols-2 gap-2">
-                                <div>
-                                    <button type="button" onclick="downloadImage({{ $key }} , false)" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">Baixar</button>
+                            <div id="card-download-buttons-{{$key}}" class="grid grid-cols-2 gap-2"> 
+                                <div> 
+                                    <button type="button" onclick="downloadImage({{ $key }} , false, {{ route('sendStock') }})" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">Baixar</button>
                                 </div>
                                 <div>
                                     <button type="button" onclick="cancelDownload({{$key}})" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 ">Cancelar</button>
@@ -97,8 +97,7 @@
             </div>  
             {{-- end exibir confirmação de download --}}
             <div class="mb-2 mt-4 flex justify-between items-center">
-                <label class="text-sm font-medium text-gray-900 dark:text-white">Cole a url do shutterstock
-                    aqui:</label>
+                <label class="text-sm font-medium text-gray-900 dark:text-white">Cole a url do banco de imagem aqui:</label>
             </div>
             <form id="form-shutter-{{ $key }}" class="flex items-center">
                 @csrf
