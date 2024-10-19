@@ -1,17 +1,24 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+<x-app-layout> 
+    <style>
+        .width-image-processed {
+            width: -webkit-fill-available;
+            height: -webkit-fill-available;
+        }        
+
+    </style>
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             {{-- <x-list-cards-banco /> --}}
         </div>
-        <div class="max-w-7xl mx-auto">
-            @for ($key = 1; $key <= 3; $key++)
-                <x-box-link :key="$key" />
-            @endfor
+        <div class="max-w-7xl mx-auto flex">
+            <div>
+                <x-list-cards-banco />
+            </div>
+            <div class="w-full">
+                @for ($key = 1; $key <= 3; $key++)
+                    <x-box-link :key="$key" />
+                @endfor
+            </div>
         </div>
     </div> 
     <script type="text/javascript">
@@ -51,11 +58,8 @@
             
     
             let data = {
-                stock_url : inputUrl.value,
-                //TODO: PASSAR O CODE_IB DINAMICO
-                code_IB: 1,
-                isPreview : isPreview ? true : false,
-                
+                stock_url : inputUrl.value, 
+                isPreview : isPreview ? true : false, 
             }
     
             xhttp.open("POST", actionUrl, true);
@@ -80,7 +84,7 @@
                     };
                 } 
     
-                let imageDefaultHTML = '<img class="h-auto max-w-sm rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
+                let imageDefaultHTML = '<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
                 
                 let imagePath = response.imagePath;
                 let baseUrl = "{{ asset('storage/processed_image/') }}"; 
@@ -89,7 +93,7 @@
                 if (this.status == 200 && response.status == true){ 
     
                     //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
-                    let imagePreview = '<img src="' + completeUrl + '" alt="" />'; 
+                    let imagePreview = '<img class="width-image-processed" src="' + completeUrl + '" alt="" />'; 
                     
                     gifMessage.innerHTML = '';
                     previewContainer.classList.add('hidden');
@@ -98,6 +102,24 @@
     
                     //Exibe o card de confirmar o download
                     if(isPreview){
+                       //TODO: Melhorar a função, ao cancelar realizar a troca dos botões e dos textos
+                       //mover esse script para a função cancelDonwlodAfterProcess / downloadFileProcessed
+                       //iago: funções não foram criadas ainda por isso deixei as trocas de texto antes de abrir o modal do preview
+
+                       //seleciona os botões de confirmação e os exibe
+                        let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
+                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                        
+                        buttonFileCardDownload.classList.add("hidden");
+                        buttonsCardDownload.classList.remove("hidden");
+
+                        //realiza a troca da mensagem de sucesso
+                        let titleCardDownload = document.getElementById('card-download-title-' +  keyForm);
+                        let textCardDownload = document.getElementById('card-download-text-' +  keyForm);
+    
+                        titleCardDownload.innerHTML = 'Deseja confirmar o pedido do arquivo?';
+                        textCardDownload.innerHTML = 'Clique abaixo para confirmar.';   
+
                         let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
                         cardConfirmDownload.classList.remove("hidden");
                     }else{
@@ -142,7 +164,7 @@
             };
         }
     </script>
-    <script>
+    <script> 
        function closeAlert(keyForm){
             let form = document.querySelector('#form-shutter-' + keyForm); 
             let inputUrl = form.querySelector('input[name="stock_url"]');
@@ -163,7 +185,7 @@
             let form = document.querySelector('#form-shutter-' + keyForm); 
             let inputUrl = form.querySelector('input[name="stock_url"]');
             let btnForm = form.querySelector('button');
-            
+
             let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
             cardConfirmDownload.classList.add("hidden"); 
     
@@ -172,6 +194,7 @@
     
             btnForm.disabled = false;
             btnForm.classList.remove("bg-gray-500","border-gray-500"); 
+            inputUrl.value = "";
         }
     </script>
 </x-app-layout>

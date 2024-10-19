@@ -1,12 +1,11 @@
 @props(['key'])
-<div class="py-10 flex items-end sm:px-6 lg:px-8">
+<div class="pb-10 flex items-end sm:px-6 lg:px-8">
     {{-- visualização do arquivo --}}
     <section>
-        <div id="container-file-{{ $key }}"
-            class="items-center h-[275px] w-[500px] rounded-lg flex p-4 justify-center border border-gray-200 rounded-lg bg-gray-50">
-            <span id="content-file-{{ $key }}" class="h-full flex">
-                <img id="content-image-default-{{ $key }}" class="h-auto max-w-sm rounded-lg"
-                    src="{{ asset('assets/images/image.jpg') }}" alt="">
+        <div id="container-file-{{ $key }}"  class="items-center h-[250px] w-[350px] rounded-lg flex p-4 justify-center border border-gray-200 rounded-lg bg-gray-50">
+            <span id="content-file-{{ $key }}" class="h-full flex items-center">
+                <img id="content-image-default-{{ $key }}" class=" w-[100px] h-[90px] rounded-lg"
+                    src="{{ asset('assets/images/image_blank.png') }}" alt="">
             </span>
             <div id="container-file-gif-{{ $key }}" class="hidden" role="status">
                 <div
@@ -69,12 +68,11 @@
                             </svg>
                         </div>
                         <div class="ms-3 text-sm font-normal ">
-                            <span id="card-download-title-{{$key}}" class="mb-1 text-sm font-semibold text-gray-900">Deseja baixar o arquivo?</span>
-                            <div id="card-download-text-{{$key}}" class="mb-2 text-sm font-normal">Confirme o download do seu arquivo.
-                            </div>
+                            <span id="card-download-title-{{$key}}" class="mb-1 text-sm font-semibold text-gray-900">Deseja confirmar o pedido do arquivo?</span>
+                            <div id="card-download-text-{{$key}}" class="mb-2 text-sm font-normal">Clique abaixo para confirmar.</div>
                             <div id="card-download-buttons-{{$key}}" class="grid grid-cols-2 gap-2"> 
                                 <div> 
-                                    <button type="button" onclick="downloadImage({{ $key }} , false, {{ route('sendStock') }})" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">Baixar</button>
+                                    <button type="button" onclick="downloadImage({{ $key }} , false)" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">Confirmar</button>
                                 </div>
                                 <div>
                                     <button type="button" onclick="cancelDownload({{$key}})" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 ">Cancelar</button>
@@ -107,7 +105,7 @@
                 <div class="relative w-full"> <input id="stock-url-{{ $key }}" name="stock_url" type="text"
                         aria-describedby="helper-text-explanation"
                         class="bg-gray-50 border border-e-0 border-gray-300 text-gray-900 text-sm border-s-0 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
-                        placeholder="https://www.shuterstock.com/br" />
+                        placeholder="exemplo: https://www.shuterstock.com/br" />
                 </div>
                 <button onclick="downloadImage({{ $key }} , true)"
                     class="flex-shrink-0 z-10 inline-flex items-center py-3 px-4 text-sm font-medium text-center text-white bg-blue-700 rounded-e-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300  border border-blue-700 hover:border-blue-800"
