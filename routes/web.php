@@ -10,16 +10,11 @@ Route::get('/', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::view('/dashboard', 'dashboard')->name('dashboard');
-    Route::view('/shutter', 'shutter')->name('shutter');
-    Route::view('/freepik', 'freepik')->name('freepik');
-    Route::view('/istock', 'istock')->name('istock');
+    Route::view('/dashboard', 'dashboard')->name('dashboard');  
 });
 
 Route::prefix('sending')->group(function () {
-    Route::post('/shutter', [OrderController::class, 'downloadImagesAtShutter'])->name('sendShutter');
-    Route::post('/freepik', [OrderController::class, 'downloadImagesAtFreepik'])->name('sendFreepik');
-    Route::post('/istock', [OrderController::class, 'downloadImagesAtiStock'])->name('sendiStock');
+    Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
 });
 
 Route::middleware('auth')->group(function () {
