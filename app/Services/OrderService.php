@@ -43,9 +43,9 @@ class OrderService
             $validatedName = $enum->getDescription(); 
 
             if($request->isPreview)
-            $getFile = $this->getPreviewStockByUrl($request->stock_url, $enum->getStockParam());
+                $getFile = $this->getPreviewStockByUrl($request->stock_url, $enum->getStockParam());
             else
-            $getFile =  $this->getStockByUrl($request->stock_url, $validatedName );  
+                $getFile =  $this->getStockByUrl($request->stock_url, $validatedName );  
 
             return $getFile;
 
