@@ -22,8 +22,7 @@ class OrderController extends Controller
     {
         try{ 
             $request->validate([
-                'stock_url'=> 'required',
-                'code_IB'=> [Rule::enum(BancoImagemEnum::class)],
+                'stock_url'=> 'required', 
                 'isPreview'=> 'required',
             ]);
             
