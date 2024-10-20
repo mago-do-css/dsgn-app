@@ -70,7 +70,7 @@
             xhttp.send(dataToSend);
     
             xhttp.onload = function() {
-                // console.log(this);
+                console.log(this);
     
                 let response;
     
@@ -84,7 +84,7 @@
                     };
                 } 
     
-                let imageDefaultHTML = '<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image.jpg') }}" alt="">';
+                let imageDefaultHTML = '<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image_blank.png') }}" alt="">';
                 
                 let imagePath = response.imagePath;
                 let baseUrl = "{{ asset('storage/processed_image/') }}"; 

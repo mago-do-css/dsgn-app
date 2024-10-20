@@ -15,18 +15,26 @@ class OrderService
     * Verifica se as informações da requisição estão válidas; 
     */
     public function requestValidator(Request $request){
-        try{ 
-            $enum = BancoImagemEnum::tryFrom($request->code_IB);  
+        try{  
+            
+            $code_bancoImage = match (true) {
+                Str::contains($request->stock_url, 'istockphoto.com') => 0,
+                Str::contains($request->stock_url, 'shutterstock.com') => 1,
+                Str::contains($request->stock_url, 'freepik.com') => 2,
+                Str::contains($request->stock_url, 'elements.envato.com') => 3,
+                Str::contains($request->stock_url, 'motionarray.com') => 4,
+                Str::contains($request->stock_url, 'graphicpear.com') => 5,
+                default => false,
+            };
 
-            if (!$enum)
-                throw new Exception("Código inválido fornecido.");
+            $enum = BancoImagemEnum::tryFrom($code_bancoImage);  
+
+            if (!$enum && !$code_bancoImage)
+                throw new Exception("Url não autenticada. Verifique novamente ou contate o suporte!");
             
             $validatedName = $enum->getDescription(); 
     
-            // if(!Str::contains($request->stock_url, $validatedName))
-            //     throw new Exception($message =  "Somente pode ser enviado URLs do ". $validatedName ."!");
-    
-            if(!$enum->getVideoCondition() && Str::contains($request->stock_url, $enum->getVideoDescription()))
+            if(!$enum->getVideoCondition() && (Str::contains($request->stock_url, $enum->getVideoDescription()) || Str::contains($request->stock_url, "/v%C3%ADdeo/")))
                 throw new Exception($message =  "Vídeos do ". $validatedName ." somente sob demanda. Entre em contato com o suporte!");
 
         }catch(Exception $e){
