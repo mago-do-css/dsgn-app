@@ -84,4 +84,9 @@ npm install flowbite
 
 3. Execute: npm run dev para ativar o tailwindcss
 
-4. acesse o localhost:8080
+4. execute o comando: php artisan migrate
+
+5. execute o comando php artisan db:seed 
+para poder popular o banco de dados 
+
+6. acesse o localhost:8080
