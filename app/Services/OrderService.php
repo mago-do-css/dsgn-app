@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Enums\BancoImagemEnum;
+use Illuminate\Support\Facades\Auth;
+use App\Models\UserLimits;
 
 class OrderService
 {
@@ -101,7 +103,20 @@ class OrderService
             
             // $response = Http::withHeaders([
             //     'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
-            // ])->get($endpoint);  
+            // ])->get($endpoint);   
+
+            //$userId = Auth::user()->id;
+            $userId = Auth::user()->getAuthIdentifier();
+
+            $getDownloadLimit = UserLimits::where('user_id', $userId)->first();
+
+            if($getDownloadLimit->limit == 0){
+                throw new Exception("Limite de downloads excedido!");
+            }
+
+            $getDownloadLimit->limit = $getDownloadLimit->limit - 1;
+            $getDownloadLimit->date_time_today = date('Y-m-d H:i:s');
+            $getDownloadLimit->save();
 
             return [
                 'status'=> true,
