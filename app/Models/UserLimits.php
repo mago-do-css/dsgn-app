@@ -16,4 +16,9 @@ class UserLimits extends Model
         'day_limit',
         'date_time_today',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

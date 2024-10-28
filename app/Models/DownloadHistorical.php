@@ -16,6 +16,7 @@ class DownloadHistorical extends Model
         'image_path',
         'image_name',
         'image_bank',
+        'image_url',
         'date', 
     ];
 
