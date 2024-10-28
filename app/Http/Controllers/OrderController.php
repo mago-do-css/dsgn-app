@@ -32,6 +32,9 @@ class OrderController extends Controller
             $this->orderService->requestValidator($request); 
 
             $getFile = $this->orderService->downloadValidator($request);
+
+            //TODO: após sucesso no download, salvar as informações no histórico
+            //url de teste: https://image.shutterstock.com/image-vector/-250nw-2491646071.jpg
           
             return [
                 'status' => $getFile['status'],
@@ -68,28 +71,43 @@ class OrderController extends Controller
 
     public function getImagesByFilter(Request $request){
 
+        //TODO: CRIAR UM MÉTODO NO SERVIÇO PARA BATER NO BANCO DE DADOS OU CAMADA NO REPOSITÓRIO
         // $request->validate([
         //     'filter'=> 'required|in:free,stock',
         // ]);
 
         $getHistorical = DownloadHistorical::query();
 
+        //TODO: criar uma documentação para explicar como usar isso
+        //obtendo o id do usuário através do middleware que está autenticado
+        $getHistorical->where('user_id', $request->user()->id);
+
         if(!empty($request->imageOrigin)){ 
             foreach ($request->image_origin as $image_bank) { 
                 if (!is_null($image_bank)) {
-                    $getHistorical->where('image_bank', $image_bank);
+                    $getHistorical->orWhere('image_bank', $image_bank); 
                 }
             } 
         }
 
-        if(!empty($request->date)){ 
-            $getHistorical->where('date', '>=',$request->min_date)
-            ->and('date', '<=',$request->max_date);
+        if (!empty($request->min_date) && !empty($request->max_date)) { 
+            $getHistorical->whereBetween('date', [$request->min_date, $request->max_date]);
         }
 
-        $getHistorical = $getHistorical->get();
+        // Paginação - ajusta o número de itens por página conforme necessário
+        $perPage = 12; // Por exemplo, 12 itens por página
+        $getHistorical = $getHistorical->paginate($perPage); 
 
-        return $getHistorical;
+        
+        //TODO: PARTE 2, BATER NA API DO NOHAT COM o parametro image_url e os respectivos bancos de imagens (validando pelo enum ) PARA RETORNAR O PREVIEW DAS IMAGENS
+        //TODO: verificar se a url do preview tem algum vencimento, caso não haja, slvar o seu valor fixo
+        
+
+        return view('historical', 
+            [
+                'historicalData' => $getHistorical,
+            ]
+        );
     }
 
 

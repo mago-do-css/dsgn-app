@@ -13,8 +13,8 @@ class DownloadHistorical extends Model
 
     protected $fillable = [
         'user_id',
-        'image_path',
-        'image_name',
+        'image_path',// para caso ficar salvo em algum local como o storage
+        'image_name',// // para caso ficar salvo em algum local como o storage
         'image_bank',
         'image_url',
         'date', 
