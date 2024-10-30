@@ -6,12 +6,8 @@ use App\Services\OrderService;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-
 use Illuminate\Support\Facades\Http; 
-use Illuminate\Validation\Rule;
-use App\Enums\BancoImagemEnum;
-use App\Models\DownloadHistorical;
+
 
 class OrderController extends Controller
 {
@@ -70,61 +66,36 @@ class OrderController extends Controller
     } 
 
     public function getImagesByFilter(Request $request){
-
-        //TODO: CRIAR UM MÉTODO NO SERVIÇO PARA BATER NO BANCO DE DADOS OU CAMADA NO REPOSITÓRIO
-        // $request->validate([
-        //     'filter'=> 'required|in:free,stock',
-        // ]);
-
-        $getHistorical = DownloadHistorical::query();
-
-        //TODO: criar uma documentação para explicar como usar isso
-        //obtendo o id do usuário através do middleware que está autenticado
-        $getHistorical->where('user_id', $request->user()->id);
-
-        if(!empty($request->imageOrigin)){ 
-            foreach ($request->image_origin as $image_bank) { 
-                if (!is_null($image_bank)) {
-                    $getHistorical->orWhere('image_bank', $image_bank); 
-                }
-            } 
-        }
-
-        if (!empty($request->min_date) && !empty($request->max_date)) { 
-            $getHistorical->whereBetween('date', [$request->min_date, $request->max_date]);
-        }
-
-        // Paginação - ajusta o número de itens por página conforme necessário
-        $perPage = 12; // Por exemplo, 12 itens por página
-        $getHistorical = $getHistorical->paginate($perPage); 
-
-        
-        //TODO: PARTE 2, BATER NA API DO NOHAT COM o parametro image_url e os respectivos bancos de imagens (validando pelo enum ) PARA RETORNAR O PREVIEW DAS IMAGENS
-        //TODO: verificar se a url do preview tem algum vencimento, caso não haja, slvar o seu valor fixo
-        
-
-        return view('historical', 
+        $page = request('page', 1);  
+ 
+        $getHistory = $this->orderService->getDownloadHistory($request);
+        $getPaginationData = $this->orderService->getPaginationData($getHistory['lastPage'], $page); 
+    
+        return view('history', 
             [
-                'historicalData' => $getHistorical,
+                'historyData' => $getHistory['historyData'],
+                'page' => $page,
+                'paginationData'=> $getPaginationData,
             ]
         );
+
     }
 
 
     public function teste(){
         // adicionar o parametro $bancoImagem
-            //TODO: para testar
-            $url = "https://www.shutterstock.com/pt/image-photo/smiling-30s-latin-hispanic-middleaged-business-2491646071";
+        //TODO: para testar
+        $url = "https://www.shutterstock.com/pt/image-photo/smiling-30s-latin-hispanic-middleaged-business-2491646071";
 
-            $encodedUrl = urlencode($url); 
+        $encodedUrl = urlencode($url); 
         
-            $endpoint = "https://vip.neh.tw/api/stockinfo/shutterstock/null?url={$encodedUrl}"; 
+        $endpoint = "https://vip.neh.tw/api/stockinfo/shutterstock/null?url={$encodedUrl}"; 
 
-            $response = Http::withHeaders([
-                'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
-            ])->get($endpoint); 
+        $response = Http::withHeaders([
+            'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
+        ])->get($endpoint); 
  
-           
-            dd($response->json());
+    
+        dd($response->json());
     }
 }
