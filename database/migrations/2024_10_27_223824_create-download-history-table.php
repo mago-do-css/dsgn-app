@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('download_historical', function (Blueprint $table) {
+        Schema::create('download_history', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('image_path');
-            $table->string('image_name');
-            $table->string('image_bank');
+            $table->string('image_path')->nullable();
+            $table->string('image_name')->nullable();
+            $table->string('image_origin')->nullable();
+            $table->string('image_url')->nullable();
             $table->timestamp('date')->nullable();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('download_historical');
+        Schema::dropIfExists('download_history');
     }
 };
