@@ -45,9 +45,9 @@ class User extends Authenticatable
         ];
     }
 
-    public function historical()
+    public function history()
     {
-        return $this->hasMany(DownloadHistorical::class, 'user_id', 'id');
+        return $this->hasMany(DownloadHistory::class, 'user_id', 'id');
     }
     public function limits()
     {

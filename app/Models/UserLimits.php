@@ -9,6 +9,7 @@ class UserLimits extends Model
 {
     use HasFactory;
     
+    protected $table = 'user_limits';
     public $timestamps = false;
 
     protected $fillable = [
