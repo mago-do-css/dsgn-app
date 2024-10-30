@@ -7,19 +7,18 @@
             
 
     </style>
+{{-- 
+    @dd($historyData)  --}} 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @foreach ( $historicalData as $key => $content ) 
-                <x-box-image-historical  :image="$content['image']" :imageOrigin="$content['imageOrigin']"  :key="$key" />
-            @endforeach
+            <div class="grid grid-rows-3 grid-flow-col gap-4"> 
+                @foreach ( $historyData as $key => $content )  
+                    <x-box-image-history  :image="$content['image_url']" :imageOrigin="$content['image_origin']"  :key="$key" />
+                @endforeach
+            </div>
         </div>
-        <div class="max-w-7xl mx-auto flex">
-            
-            {{-- <div class="w-full">
-                @for ($key = 1; $key <= 3; $key++)
-                    <x-box-link :key="$key" />
-                @endfor
-            </div> --}}
+        <div class="max-w-7xl mx-auto flex justify-center mt-8"> 
+           <x-pagination-history :page="$page" :paginationData="$paginationData"/> 
         </div>
     </div> 
     <script type="text/javascript">
