@@ -9,7 +9,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Enums\BancoImagemEnum;
 use Illuminate\Support\Facades\Auth;
-use App\Models\UserLimits;
+use App\Models\UserLimits; 
+use App\Models\DownloadHistory;
 
 class OrderService
 {
@@ -78,7 +79,7 @@ class OrderService
             $response = Http::withHeaders([
                 'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
             ])->get($endpoint); 
-         
+ 
             if(isset($response->json()['error']) && $response->json()['error'])
                 throw new Exception($message = "Erro na requisição das imagens!");
 
@@ -128,4 +129,65 @@ class OrderService
             throw new Exception($e->getMessage());
         }  
     }    
+
+    public function getDownloadHistory($request)
+    {
+        try{
+        
+        $getHistory = DownloadHistory::query();
+
+        //TODO: criar uma documentação para explicar como usar isso
+        //obtendo o id do usuário através do middleware que está autenticado
+        $getHistory->where('user_id', $request->user()->id);
+
+        if(!empty($request->imagesOrigin)){ 
+            foreach ($request->imagesOrigin as $image_bank) { 
+                if (!is_null($image_bank)) {
+                    $getHistory->orWhere('image_origin', $image_bank); 
+                }
+            } 
+        }
+
+        if (!empty($request->min_date) && !empty($request->max_date)) { 
+            $getHistory->whereBetween('date', [$request->min_date, $request->max_date]);
+        }
+
+        // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
+        $perPage = 12; 
+        $getHistory = $getHistory->paginate($perPage);  
+        
+        $lastPage = $getHistory->lastPage();    
+
+        return [
+            'historyData' => $getHistory, 
+            'lastPage'=> $lastPage        
+        ];
+        }  catch(Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function getPaginationData($lastPage, $page)
+    {
+        $maxPagePerView = 5; 
+
+        // Calcule os números de início e fim da paginação de forma flexível
+        $halfRange = floor($maxPagePerView / 2);
+        $startNumber = max(1, $page - $halfRange); //ex: 4-2 = 2 então o start será 2
+        $endNumber = min($lastPage, $page + $halfRange); //ex: 4+2 = 6 então o end será 6
+
+        //explicação: verifica se o current page é menor que o last page, caso for igual, ele pulará o If
+        if ($endNumber - $startNumber + 1 < $maxPagePerView) { 
+            if ($startNumber === 1) {
+                $endNumber = min($lastPage, $maxPagePerView);
+            } elseif ($endNumber === $lastPage) {
+                $startNumber = max(1, $endNumber - $maxPagePerView + 1);
+            }
+        }
+
+        return [
+            'startNumber' => $startNumber,
+            'endNumber' => $endNumber
+        ]; 
+    }
 }
