@@ -5,19 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DownloadHistorical extends Model
+class DownloadHistory extends Model
 {
     use HasFactory;
-    
+     
+    protected $table = 'download_history';
     public $timestamps = false;
 
     protected $fillable = [
         'user_id',
         'image_path',// para caso ficar salvo em algum local como o storage
         'image_name',// // para caso ficar salvo em algum local como o storage
-        'image_bank',
+        'image_origin',
         'image_url',
-        'date', 
+        'date',  
     ];
 
     public function user()
