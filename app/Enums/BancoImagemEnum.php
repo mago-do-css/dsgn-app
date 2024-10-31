@@ -10,6 +10,7 @@ enum BancoImagemEnum: int
     case envato = 3; 
     case motionarray = 4;
     case graphipear = 5;
+    case flaticon = 6;
 
      // Método para retornar informações extras
     public function getDescription(): string
