@@ -146,7 +146,7 @@ class OrderService
             }, $request->images_origin));
         }
 
-        if (!empty($request->min_date) && !empty($request->max_date)) { 
+        if (!empty($request->date_start) && !empty($request->date_start)) { 
             $getHistory->whereBetween('date', [$request->date_start, $request->date_end]);
         }
 
