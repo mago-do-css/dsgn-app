@@ -138,18 +138,16 @@ class OrderService
 
         //TODO: criar uma documentação para explicar como usar isso
         //obtendo o id do usuário através do middleware que está autenticado
-        $getHistory->where('user_id', $request->user()->id);
+        $getHistory->where('user_id', $request->user()->id); 
 
-        if(!empty($request->imagesOrigin)){ 
-            foreach ($request->imagesOrigin as $image_bank) { 
-                if (!is_null($image_bank)) {
-                    $getHistory->orWhere('image_origin', $image_bank); 
-                }
-            } 
+        if (!empty($request->images_origin)) {
+            $getHistory->whereIn('image_origin', array_map(function($image_bank) {
+                return BancoImagemEnum::from($image_bank)->name;
+            }, $request->images_origin));
         }
 
         if (!empty($request->min_date) && !empty($request->max_date)) { 
-            $getHistory->whereBetween('date', [$request->min_date, $request->max_date]);
+            $getHistory->whereBetween('date', [$request->date_start, $request->date_end]);
         }
 
         // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
@@ -157,10 +155,11 @@ class OrderService
         $getHistory = $getHistory->paginate($perPage);  
         
         $lastPage = $getHistory->lastPage();    
-
+ 
         return [
             'historyData' => $getHistory, 
-            'lastPage'=> $lastPage        
+            'lastPage'=> $lastPage,
+            'selectedOptions' => $request->images_origin, 
         ];
         }  catch(Exception $e){
             throw new Exception($e->getMessage());
