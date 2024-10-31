@@ -66,6 +66,8 @@ class OrderController extends Controller
     } 
 
     public function getImagesByFilter(Request $request){
+
+
         $page = request('page', 1);  
  
         $getHistory = $this->orderService->getDownloadHistory($request);
@@ -76,6 +78,7 @@ class OrderController extends Controller
                 'historyData' => $getHistory['historyData'],
                 'page' => $page,
                 'paginationData'=> $getPaginationData,
+                'selectedOptions'=> $getHistory['selectedOptions']
             ]
         );
 
