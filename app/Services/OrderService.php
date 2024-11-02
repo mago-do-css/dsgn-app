@@ -40,7 +40,7 @@ class OrderService
             $validatedName = $enum->getDescription();
 
             if (!$enum->getVideoCondition() && (Str::contains($stock_url, $enum->getVideoDescription()) || Str::contains($stock_url, "/v%C3%ADdeo/")))
-                throw new Exception($message =  "Vídeos do " . $validatedName . " somente sob demanda. Entre em contato com o suporte!");
+                throw new Exception($message =  "Vídeos do " . $validatedName . "somente sob demanda. Entre em contato com o suporte!");
 
             return $enum;
         } catch (Exception $e) {
@@ -106,10 +106,33 @@ class OrderService
             // ])->get($endpoint);   
 
             //$userId = Auth::user()->id;
+
+            
+            //TODO: pegar resposta de erro da api em py e setar como true para indicar que é uma image premiun
+            $urlValidate = "https://www.shutterstock.com/pt/image-photo/vibrant-autumn-colours-on-tree-foliage-2504823041";
+            $stockPremiumBlocked = false;
+
+            if($stockPremiumBlocked){
+                $response = Http::withHeaders([
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                    'Accept-Language' => 'pt-BR,pt;q=0.8,en-US;q=0.5,en;q=0.3',
+                    'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36',
+                    'Accept-Encoding' => 'gzip, deflate, br',
+                    'Connection' => 'keep-alive',
+                    'Upgrade-Insecure-Requests' => '1',
+                    'Cache-Control' => 'max-age=0',
+                ])->get($urlValidate);
+
+                $body = $response->getBody();
+
+                if (strpos($body, 'mui-1pzresd-overlayIcon') !== false) {
+                    throw new Exception("Este conteúdo é <b>premium, compra somente sob demanda</b>. Caso queira adquirir entre em contato com o suporte. Atenciosamente, equipe Designer Elite."); 
+                }  
+            }
+
             $userId = Auth::user()->getAuthIdentifier();
-
+            
             $getDownloadLimit = UserLimits::where('user_id', $userId)->first();
-
 
             if ($getDownloadLimit == null) {
                 throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
