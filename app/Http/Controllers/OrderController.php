@@ -6,9 +6,8 @@ use App\Services\OrderService;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
-use App\Enums\BancoImagemEnum;
+use Illuminate\Support\Facades\Http; 
+
 
 class OrderController extends Controller
 {
@@ -23,12 +22,15 @@ class OrderController extends Controller
         try{ 
             $request->validate([
                 'stock_url'=> 'required', 
-                'isPreview'=> 'required',
+                'isPreview'=> 'required|in:true,false',
             ]);
             
             $this->orderService->requestValidator($request); 
 
             $getFile = $this->orderService->downloadValidator($request);
+
+            //TODO: após sucesso no download, salvar as informações no histórico
+            //url de teste: https://image.shutterstock.com/image-vector/-250nw-2491646071.jpg
           
             return [
                 'status' => $getFile['status'],
@@ -62,4 +64,41 @@ class OrderController extends Controller
         // Processar a resposta conforme necessário
         return $responseBody;
     } 
+
+    public function getImagesByFilter(Request $request){
+
+
+        $page = request('page', 1);  
+ 
+        $getHistory = $this->orderService->getDownloadHistory($request);
+        $getPaginationData = $this->orderService->getPaginationData($getHistory['lastPage'], $page); 
+    
+        return view('history', 
+            [
+                'historyData' => $getHistory['historyData'],
+                'page' => $page,
+                'paginationData'=> $getPaginationData,
+                'selectedOptions'=> $getHistory['selectedOptions']
+            ]
+        );
+
+    }
+
+
+    public function teste(){
+        // adicionar o parametro $bancoImagem
+        //TODO: para testar
+        $url = "https://www.shutterstock.com/pt/image-photo/smiling-30s-latin-hispanic-middleaged-business-2491646071";
+
+        $encodedUrl = urlencode($url); 
+        
+        $endpoint = "https://vip.neh.tw/api/stockinfo/shutterstock/null?url={$encodedUrl}"; 
+
+        $response = Http::withHeaders([
+            'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
+        ])->get($endpoint); 
+ 
+    
+        dd($response->json());
+    }
 }

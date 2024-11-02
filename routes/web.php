@@ -11,10 +11,12 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');  
+    Route::get('/historico', [OrderController::class, 'getImagesByFilter'])->name('history');  
 });
 
 Route::prefix('sending')->group(function () {
     Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
+    Route::get('/stock_teste', [OrderController::class, 'teste'])->name('sendStocTeste'); 
 });
 
 Route::middleware('auth')->group(function () {

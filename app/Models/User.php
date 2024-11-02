@@ -44,4 +44,13 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function history()
+    {
+        return $this->hasMany(DownloadHistory::class, 'user_id', 'id');
+    }
+    public function limits()
+    {
+        return $this->hasOne(UserLimits::class, 'user_id', 'id');
+    }
 }
