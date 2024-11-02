@@ -215,7 +215,9 @@ class OrderService
 
         return [
             'startNumber' => $startNumber,
-            'endNumber' => $endNumber
+            'endNumber' => $endNumber,
+            'previousPage' => max(1, $page - 1),
+            'nextPage' =>min($lastPage, $page + 1),
         ];
     }
 }
