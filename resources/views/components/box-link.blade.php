@@ -102,7 +102,7 @@
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
                 <span
                     class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg ">URL</span>
-                <div class="relative w-full"> <input id="stock-url-{{ $key }}" name="stock_url" type="text"
+                <div class="relative w-full"> <input autocomplete="off" id="stock-url-{{ $key }}" name="stock_url" type="text"
                         aria-describedby="helper-text-explanation"
                         class="bg-gray-50 border border-e-0 border-gray-300 text-gray-900 text-sm border-s-0 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  "
                         placeholder="exemplo: https://www.shuterstock.com/br" />
