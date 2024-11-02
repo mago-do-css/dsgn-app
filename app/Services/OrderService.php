@@ -11,6 +11,7 @@ use App\Enums\BancoImagemEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserLimits; 
 use App\Models\DownloadHistory;
+use Carbon\Carbon;
 
 class OrderService
 {
@@ -146,8 +147,11 @@ class OrderService
             }, $request->images_origin));
         }
 
-        if (!empty($request->date_start) && !empty($request->date_start)) { 
-            $getHistory->whereBetween('date', [$request->date_start, $request->date_end]);
+        if (!empty($request->date_start) && !empty($request->date_end)) {
+            $startDate = Carbon::createFromFormat('d/m/Y', $request->date_start)->format('Y-m-d');
+            $endDate = Carbon::createFromFormat('d/m/Y', $request->date_end)->format('Y-m-d');
+        
+            $getHistory->whereBetween('date', [$startDate, $endDate]);
         }
 
         // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página

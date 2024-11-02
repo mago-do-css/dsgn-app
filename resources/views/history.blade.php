@@ -13,7 +13,7 @@
             <div class="mr-4">
                 <form id="form-filters" action="{{ route('history', ['page' => 1]) }}"  method="GET">
                     {{-- date --}}
-                    <div id="date-range-picker" date-rangepicker class="w-48 flex flex-col items-center">
+                    <div id="date-range-picker" datepicker datepicker-format="dd/mm/yyyy" date-rangepicker class="w-48 flex flex-col items-center">
                         <div class="relative">
                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
@@ -22,7 +22,7 @@
                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input id="datepicker-range-start" name="date_start" type="text"
+                            <input id="datepicker-range-start" datepicker datepicker-format="dd/mm/yyyy" name="date_start" type="text"
                                 class="form-control-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Selecione a data inicial"
                                 value='{{ request()->date_start ?? '' }}'
@@ -37,7 +37,7 @@
                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                 </svg>
                             </div>
-                            <input id="datepicker-range-end" name="date_end" type="text"
+                            <input id="datepicker-range-end" datepicker datepicker-format="dd/mm/yyyy" name="date_end" type="text"
                                 class=" form-control-input bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 placeholder="Selecione a data final" 
                                 value='{{ request()->date_end ?? '' }}'>
