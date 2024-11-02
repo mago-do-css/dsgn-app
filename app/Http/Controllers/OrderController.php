@@ -25,11 +25,11 @@ class OrderController extends Controller
                 'isPreview'=> 'required|in:true,false',
             ]);
             
-            $this->orderService->requestValidator($request); 
+            $getEnum =$this->orderService->requestEnumValidator($request->stock_url); 
 
-            $getFile = $this->orderService->downloadValidator($request);
+            $getFile = $this->orderService->downloadValidator($request, $getEnum);
 
-            //TODO: após sucesso no download, salvar as informações no histórico
+            //TODO: retornar o resultado do validator
             //url de teste: https://image.shutterstock.com/image-vector/-250nw-2491646071.jpg
           
             return [

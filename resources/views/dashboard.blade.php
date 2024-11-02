@@ -90,6 +90,7 @@
                 let baseUrl = "{{ asset('storage/processed_image/') }}"; 
                 let completeUrl = isPreview ? imagePath : baseUrl + '/' + imagePath;
     
+                console.log(response);
                 if (this.status == 200 && response.status == true){ 
     
                     //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
