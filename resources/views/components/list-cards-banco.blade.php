@@ -3,32 +3,32 @@
         [
             'text' => 'Shutterstock',
             'image' => 'shutter.png',
-            'url' => 'https://shutterstock.com/'
+            'url' => 'https://nullrefer.site/shutterstock.com/'
         ] ,
         [
             'text' => 'iStock',
             'image' => 'istock.png',
-            'url' => 'https://www.istockphoto.com/br'
+            'url' => 'https://nullrefer.site/istockphoto.com/br'
         ],
         [
             'text' => 'Freepik',
             'image' => 'freepik.png',
-            'url' => 'https://br.freepik.com/'
+            'url' => 'https://nullrefer.site/br.freepik.com/'
         ],
         [
             'text' => 'Envato',
             'image' => 'envato.png',
-            'url' => 'https://elements.envato.com/pt-br/'
+            'url' => 'https://nullrefer.site/elements.envato.com/pt-br/'
         ],
         [
             'text' => 'Motion Array',
             'image' => 'motion.png',
-            'url' => 'https://motionarray.com/'
+            'url' => 'https://nullrefer.site/motionarray.com/'
         ],
         [
             'text' => 'Graphic Pear',
             'image' => 'graphic.png',
-            'url' => 'https://www.graphicpear.com/'
+            'url' => 'https://nullrefer.site/graphicpear.com/'
         ],
     ];
 @endphp
