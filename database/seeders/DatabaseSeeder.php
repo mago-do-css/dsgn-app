@@ -21,10 +21,10 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('teste@123'),
         ]);
 
-        UserLimits::factory()->create([ 
+        UserLimits::create([ 
             'user_id' => 1,
             'limit' => 5,
-        ]);
+        ]); 
 
         $this->call(
             S01_DownloadHistorySeeder::class,
