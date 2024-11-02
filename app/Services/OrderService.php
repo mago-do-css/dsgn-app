@@ -20,7 +20,6 @@ class OrderService
     */
     public function requestValidator(Request $request){
         try{  
-            
             $code_bancoImage = match (true) {
                 Str::contains($request->stock_url, 'istockphoto.com') => 0,
                 Str::contains($request->stock_url, 'shutterstock.com') => 1,
@@ -32,7 +31,7 @@ class OrderService
             };
 
             $enum = BancoImagemEnum::tryFrom($code_bancoImage);  
-
+            
             if (!$enum && !$code_bancoImage)
                 throw new Exception("Url não autenticada. Verifique novamente ou contate o suporte!");
             
@@ -51,6 +50,7 @@ class OrderService
     */
     public function downloadValidator(Request $request){
         try{
+            dd($request);
             $enum = BancoImagemEnum::tryFrom($request->code_IB);  
             $validatedName = $enum->getDescription(); 
 
@@ -76,7 +76,7 @@ class OrderService
             $encodedUrl = urlencode($url); 
         
             $endpoint = "https://vip.neh.tw/api/stockinfo/{$stock_param}/null?url={$encodedUrl}"; 
-
+            dd($stock_param);
             $response = Http::withHeaders([
                 'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
             ])->get($endpoint); 

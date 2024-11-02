@@ -9,6 +9,10 @@ Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/teste', function () {
+    return view('dashboardteste');
+})->middleware(['auth', 'verified'])->name('dashboardteste');
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');  
     Route::get('/historico', [OrderController::class, 'getImagesByFilter'])->name('history');  
@@ -16,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::prefix('sending')->group(function () {
     Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
-    Route::get('/stock_teste', [OrderController::class, 'teste'])->name('sendStocTeste'); 
+    Route::post('/stock_teste', [OrderController::class, 'downloadImageByUrl'])->name('sendStocTeste'); 
 });
 
 Route::middleware('auth')->group(function () {
