@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User; 
+use App\Models\UserLimits; 
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,6 +19,11 @@ class DatabaseSeeder extends Seeder
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => bcrypt('teste@123'),
+        ]);
+
+        UserLimits::factory()->create([ 
+            'user_id' => 1,
+            'limit' => 5,
         ]);
 
         $this->call(

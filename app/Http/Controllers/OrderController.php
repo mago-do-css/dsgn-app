@@ -16,14 +16,23 @@ class OrderController extends Controller
     public function __construct(OrderService $orderService){
         $this->orderService = $orderService;
     }
-
+ 
+/**
+ * Valida os dados da requisição e processa o download ou pré-visualização
+ * de uma imagem a partir da URL de estoque especificada.
+ *
+ * @param Request $request O objeto de requisição HTTP contendo os campos 'stock_url' e 'isPreview'.
+ * 
+ * @return array Um array contendo o status da operação e o caminho da imagem ou uma mensagem de erro. 
+ */ 
     public function downloadImageByUrl(Request $request)
     {
         try{ 
             $request->validate([
                 'stock_url'=> 'required', 
-                'isPreview'=> 'required|in:true,false',
+                'isPreview'=> 'required',
             ]);
+            //TODO: ajustar o in do validate   'isPreview'=> 'required|in:0,1',
             
             $getEnum =$this->orderService->requestEnumValidator($request->stock_url); 
 
@@ -44,6 +53,7 @@ class OrderController extends Controller
             ];
         }  
     }
+
 
     public function downloadImagesAtFreepik(Request $request)
     {

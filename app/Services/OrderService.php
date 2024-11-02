@@ -75,6 +75,7 @@ class OrderService
             $encodedUrl = urlencode($url);
 
             $endpoint = "https://vip.neh.tw/api/stockinfo/{$stock_param}/null?url={$encodedUrl}";
+        
             $response = Http::withHeaders([
                 'X-Api-Key' => 'sV6mS2Q3NArE2s351IXovmEOcXaSwk',
             ])->get($endpoint);
@@ -108,6 +109,11 @@ class OrderService
             $userId = Auth::user()->getAuthIdentifier();
 
             $getDownloadLimit = UserLimits::where('user_id', $userId)->first();
+
+
+            if ($getDownloadLimit == null) {
+                throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
+            }
 
             if ($getDownloadLimit->limit == 0) {
                 throw new Exception("Limite de downloads excedido!");
