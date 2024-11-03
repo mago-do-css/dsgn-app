@@ -11,6 +11,8 @@ enum BancoImagemEnum: int
     case motionarray = 4;
     case graphipear = 5;
     case flaticon = 6;
+    case istock_vector = 7;
+    case shutterstock_vector = 8;
 
      // Método para retornar informações extras
     public function getDescription(): string
@@ -23,6 +25,7 @@ enum BancoImagemEnum: int
             self::motionarray => 'motionarray',
         };
     }
+
     public function getVideoCondition(): string
     {
         return match($this) {
@@ -33,6 +36,7 @@ enum BancoImagemEnum: int
             self::motionarray => true,
         };
     }
+
     public function getVideoDescription(): string
     {
         return match($this) {
@@ -42,6 +46,7 @@ enum BancoImagemEnum: int
             self::envato => '',
         };
     } 
+
     public function getUrl(): string
     {
         return match($this) {
@@ -52,6 +57,7 @@ enum BancoImagemEnum: int
             self::motionarray => 'https://motionarray.com',
         };
     } 
+
     public function getStockParam(): string
     {
         return match($this) {
@@ -62,4 +68,13 @@ enum BancoImagemEnum: int
             self::motionarray => 'motionarray',
         };
     } 
+    public function getStockRegex(): string{
+        return match($this){
+            self::istock => '/foto\/(.*)-gm(\d+)/',
+            self::istock_vector => '/vetor\/(.*)-gm(\d+)/',
+            self::shutterstock => '/image-photo\/(.*)-(\d+)/',
+            self::shutterstock_vector => '/image-vector\/(.*)-(\d+)/',
+            self::freepik => '/-premium\/(.*?)_/',
+        };
+    }
 } 
