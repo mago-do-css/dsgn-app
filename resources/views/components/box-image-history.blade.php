@@ -5,11 +5,11 @@
             <img class=" " src="{{ $content['stock_image_preview'] }}" alt="" /> 
         </div> 
         <div class="p-5">
-            <h5 class="text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ ($content['stock_name'] == null) ? 'Não informado' : $content['stock_name']   }}</h5>
+            <h5 class="capitalize text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ ($content['stock_name'] == null) ? 'Não informado' : $content['stock_name']   }}</h5>
             </a>
             <div class="flex items-center my-3">
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{{ $content['stock_type'] }}</span>
-                <span class="ml-3 bg-blue-300 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ $content['stock_origin'] }}</span>
+                <span class=" capitalize bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{{ $content['stock_type'] }}</span>
+                <span class=" capitalize ml-3 bg-blue-300 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded">{{ $content['stock_origin'] }}</span>
 
             </div>
             <a href="#" class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">

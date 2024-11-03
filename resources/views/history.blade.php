@@ -156,8 +156,8 @@
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option @if ($selectedOptionOrdernation == null) selected @endif disabled>Ordenar por</option>
                         <option @if ($selectedOptionOrdernation == 'order') selected @endif value="order">Ordem Alfabética</option>
-                        <option @if ($selectedOptionOrdernation == 'date_max') selected @endif value="date_max">Maior Data</option>
-                        <option @if ($selectedOptionOrdernation == 'date_min') selected @endif value="date_min">Menor Data</option>
+                        <option @if ($selectedOptionOrdernation == 'date_max') selected @endif value="date_max">Recente</option>
+                        <option @if ($selectedOptionOrdernation == 'date_min') selected @endif value="date_min">Mais Antigo</option>
                     </select>
                     {{--  end ordenation filter --}}
 
@@ -278,16 +278,15 @@
                     };
                 }
 
-                let imageDefaultHTML =
-                    '<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image_blank.png') }}" alt="">';
+                
+                let imageDefaultHTML ='<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image_blank.png') }}" alt="">';
 
                 let imagePath = response.imagePath;
                 let baseUrl = "{{ asset('storage/processed_image/') }}";
                 let completeUrl = isPreview ? imagePath : baseUrl + '/' + imagePath;
 
                 if (this.status == 200 && response.status == true) {
-
-                    //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
+ 
                     let imagePreview = '<img class="width-image-processed" src="' + completeUrl + '" alt="" />';
 
                     gifMessage.innerHTML = '';
