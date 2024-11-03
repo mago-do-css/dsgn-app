@@ -14,16 +14,18 @@ Route::get('/teste', function () {
     return view('dashboardteste');
 })->middleware(['auth', 'verified'])->name('dashboardteste');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');  
     Route::get('/historico', [HistoryController::class, 'getImagesByFilter'])->name('history');  
 });
 
+// TODO: VERIFICAR SE É NECESSÁRIO TER A CONFIRMAÇÃO DE EMAIL
+// ['auth', 'verified']
 Route::prefix('sending')->group(function () {
     Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
     Route::post('/stock_teste', [OrderController::class, 'downloadImageByUrl'])->name('sendStocTeste'); 
     Route::get('/traduzir_teste', [HistoryController::class, 'traduzirTextoTeste'])->name('traduzirTeste'); 
-});
+})->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
