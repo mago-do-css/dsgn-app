@@ -14,11 +14,12 @@ class DownloadHistory extends Model
 
     protected $fillable = [
         'user_id',
-        'image_path',// para caso ficar salvo em algum local como o storage
-        'image_name',// // para caso ficar salvo em algum local como o storage
-        'image_origin',
-        'image_url',
-        'date',  
+        'stock_path',// para caso ficar salvo em algum local como o storage
+        'stock_name',// // para caso ficar salvo em algum local como o storage
+        'stock_origin',
+        'stock_url',
+        'stock_origin_param',
+        'date',   
     ];
 
     public function user()

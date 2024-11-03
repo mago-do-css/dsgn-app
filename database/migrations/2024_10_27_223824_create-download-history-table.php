@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('image_path')->nullable();
-            $table->string('image_name')->nullable();
-            $table->string('image_origin')->nullable();
-            $table->string('image_url')->nullable();
+            $table->string('stock_path')->nullable();
+            $table->string('stock_name')->nullable();
+            $table->string('stock_url')->nullable();
+            $table->string('stock_origin')->nullable();
+            $table->string('stock_origin_param')->nullable();
             $table->timestamp('date')->nullable();
         });
     }
