@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\HistoryService;
 use App\Services\OrderService;
 use Exception;
 use GuzzleHttp\Client;
@@ -11,10 +12,10 @@ use Illuminate\Support\Facades\Http;
 
 class OrderController extends Controller
 {
-    protected $orderService;
+    protected $orderService; 
 
     public function __construct(OrderService $orderService){
-        $this->orderService = $orderService;
+        $this->orderService = $orderService; 
     }
  
 /**
@@ -34,16 +35,19 @@ class OrderController extends Controller
             ]);
             //TODO: ajustar o in do validate   'isPreview'=> 'required|in:0,1',
             
-            $getEnum =$this->orderService->requestEnumValidator($request->stock_url); 
+            $getEnum = $this->orderService->requestEnumValidator($request->stock_url); 
 
             $getFile = $this->orderService->downloadValidator($request, $getEnum);
+  
+            $result = $this->orderService->saveHistory($request->stock_url, $getFile['imagePath'], $getEnum, $getFile['save'], $request->orderCode );
 
-            //TODO: retornar o resultado do validator
-            //url de teste: https://image.shutterstock.com/image-vector/-250nw-2491646071.jpg
+            if($getFile['status'] && $getFile['save'])
+                $this->orderService->decreaseDownloadLimit(); 
           
             return [
                 'status' => $getFile['status'],
-                'imagePath' => $getFile['imagePath']
+                'imagePath' => $getFile['imagePath'],
+                'orderCode' => $result != null ? $result : null
             ]; 
 
         }catch(Exception $e){
@@ -53,47 +57,6 @@ class OrderController extends Controller
             ];
         }  
     }
-
-
-    public function downloadImagesAtFreepik(Request $request)
-    {
-        dd($request->freepik_url);
-
-        $data = [
-            'url' => $request->freepik_url,
-            // seu array de dados aqui
-        ];
-
-        $client = new Client();
-        $response = $client->post('<http://endereco-do-seu-servidor-python:5000/receive-data>', [
-            'json' => $data
-        ]);
-
-        $responseBody = json_decode($response->getBody(), true);
-
-        // Processar a resposta conforme necessário
-        return $responseBody;
-    } 
-
-    public function getImagesByFilter(Request $request){
-
-
-        $page = request('page', 1);  
- 
-        $getHistory = $this->orderService->getDownloadHistory($request);
-        $getPaginationData = $this->orderService->getPaginationData($getHistory['lastPage'], $page); 
-    
-        return view('history', 
-            [
-                'historyData' => $getHistory['historyData'],
-                'page' => $page,
-                'paginationData'=> $getPaginationData,
-                'selectedOptions'=> $getHistory['selectedOptions']
-            ]
-        );
-
-    }
-
 
     public function teste(){
         // adicionar o parametro $bancoImagem
@@ -110,5 +73,5 @@ class OrderController extends Controller
  
     
         dd($response->json());
-    }
+    } 
 }
