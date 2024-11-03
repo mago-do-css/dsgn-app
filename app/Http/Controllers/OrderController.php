@@ -35,14 +35,14 @@ class OrderController extends Controller
             ]);
             //TODO: ajustar o in do validate   'isPreview'=> 'required|in:0,1',
             
-            $getEnum =$this->orderService->requestEnumValidator($request->stock_url); 
+            $getEnum = $this->orderService->requestEnumValidator($request->stock_url); 
 
             $getFile = $this->orderService->downloadValidator($request, $getEnum);
   
             $result = $this->orderService->saveHistory($request->stock_url, $getFile['imagePath'], $getEnum, $getFile['save'], $request->orderCode );
 
-            //TODO: retornar o resultado do validator
-            //url de teste: https://image.shutterstock.com/image-vector/-250nw-2491646071.jpg
+            if($getFile['status'] && $getFile['save'])
+                $this->orderService->decreaseDownloadLimit($getFile); 
           
             return [
                 'status' => $getFile['status'],

@@ -3,16 +3,16 @@
 namespace App\Services;
 
 use Exception;
-use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 use App\Enums\BancoImagemEnum;
 use Illuminate\Support\Facades\Auth;
-use App\Models\UserLimits;
-use App\Models\DownloadHistory;
+use App\Models\DownloadHistory; 
 use Carbon\Carbon;
+use App\Models\UserLimits;  
+//use GuzzleHttp\Client;
+//use Illuminate\Validation\Rule;
 
 class OrderService
 {
@@ -52,10 +52,12 @@ class OrderService
     public function downloadValidator(Request $request, $enum)
     {
         try {
-            if ($request->isPreview)
+            if ($request->isPreview){
                 $getFile = $this->getPreviewStockByUrl($request->stock_url, $enum->getStockParam());
-            else
-                $getFile =  $this->getStockByUrl($request->stock_url, $enum->getDescription());
+            }else{
+                $this->getDownloadLimit();
+                $getFile = $this->getStockByUrl($request->stock_url, $enum->getDescription());
+            }
 
             return $getFile;
         } catch (Exception $e) {
@@ -63,28 +65,52 @@ class OrderService
         }
     }  
 
-    public function saveHistory($stock_url, $file, $enum){
+    public function saveHistory($stock_url, $imagePreview, $enum, $isSave, $orderCode){
         try { 
-            
-            $pattern = $enum->getStockRegex();
-            preg_match($pattern, $stock_url, $matches);
-            
-            if ($matches)
-                $stockName = str_replace('-', ' ', $matches[1]);  
 
-            DownloadHistory::create([
-                'user_id' => Auth::user()->id,
-                'stock_name' => $stockName,
-                'stock_origin' => $enum->getDescription(),
-                'stock_origin_param' => $enum->getStockParam(),
-                'stock_type' => $enum->getStockType(),
-                'stock_url' => $stock_url, 
-                'date' => Carbon::now(),
-            ]);
+            if(!$isSave && $orderCode == null){ 
+              $getCode =  DownloadHistory::create([
+                    'user_id' => Auth::user()->id,  
+                    'stock_image_preview' => $imagePreview,
+                    'order_code'=> Str::uuid(), 
+                    'date' => Carbon::now(),
+                ]); 
+
+                return $getCode['order_code'];
+            }else{
+                $stockName = null;
+            
+                $pattern = $enum->getStockRegex();
+                preg_match($pattern, $stock_url, $matches);
+                
+                if ($matches)
+                    $stockName = str_replace('-', ' ', $matches[1]);   
+                
+                DownloadHistory::where('order_code', $orderCode)
+                ->where('user_id', Auth::user()->id)
+                ->update([  
+                        'stock_name' => $stockName,
+                        'stock_origin' => $enum, 
+                        'stock_origin_param' => $enum->getStockParam(),
+                        'stock_type' => $enum->getStockType(),
+                        'stock_url' => $stock_url, 
+                        'date' => Carbon::now(),
+                ]); 
+            }   
             
         }catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
+    } 
+    
+    public function decreaseDownloadLimit($downloadLimitData){
+        try{ 
+            $downloadLimitData->limit = $downloadLimitData->limit - 1;
+            $downloadLimitData->date_time_today = date('Y-m-d H:i:s');
+            $downloadLimitData->save();
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        } 
     }
     
     #region PRIVATE Download 
@@ -108,7 +134,8 @@ class OrderService
 
             return [
                 'status' => true,
-                'imagePath' => $response->json()['data']['image']
+                'imagePath' => $response->json()['data']['image'],
+                'save'=> false
             ];
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -162,5 +189,24 @@ class OrderService
             throw new Exception($e->getMessage());
         }
     } 
+
+    private function getDownloadLimit(){
+        try{
+            $userId = Auth::user()->getAuthIdentifier();
+            
+            $getDownloadLimit = UserLimits::where('user_id', $userId)->first();
+
+            if ($getDownloadLimit == null) {
+                throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
+            }
+
+            if ($getDownloadLimit->limit == 0) {
+                throw new Exception("Limite de downloads excedido!");
+            } 
+          
+        }catch(Exception $e){
+            throw new Exception($e->getMessage());
+        } 
+    }
     #endregion 
-}
+} 
