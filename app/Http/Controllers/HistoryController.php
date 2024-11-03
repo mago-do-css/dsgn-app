@@ -34,7 +34,8 @@ class HistoryController extends Controller{
                 'historyData' => $getHistory['historyData'],
                 'page' => $page,
                 'paginationData'=> $getPaginationData,
-                'selectedOptions'=> $getHistory['selectedOptions']
+                'selectedOptionsImageBank'=> $getHistory['selectedOptionsImageBank'],
+                'selectedOptionStockType' => $getHistory['selectedOptionStockType'],
             ]
         );
     }
