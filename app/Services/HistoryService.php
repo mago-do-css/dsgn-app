@@ -58,7 +58,7 @@ class HistoryService
                 $getHistory->when(request()->input('ordernation'), function ($query, $ordernation) {
                     switch ($ordernation) {
                         case 'order':
-                            $query->orderBy('name', 'asc');
+                            $query->orderBy('stock_name', 'asc');
                             break;
                         case 'date_max':
                             $query->orderBy('date', 'desc');
