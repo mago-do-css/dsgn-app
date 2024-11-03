@@ -1,6 +1,7 @@
 <?php 
 
-namespace App\Enums;
+namespace App\Enums; 
+use App\Enums\StockTypeEnum;
 
 enum BancoImagemEnum: int
 {
@@ -82,15 +83,16 @@ enum BancoImagemEnum: int
 
     //TODO: Ja vou avisando que o shutter vai salvar as imagens como vector pois o código valida um trecho da url
     // para determinar se é imagem ou não
-    public function getStockType(): string{
+    //IMPORTEI O ENUM EM OUTRO ENUM DESCULPA POR SER MOLEQUE
+    public function getStockType(){
         return match($this){
-            self::istock => 'image',
-            self::istock_vector => 'vector',
-            self::shutterstock => 'image',
-            self::shutterstock_vector => 'vector',
-            self::freepik => 'image',
-            self::freepik_vector => 'vector',
-            self::freepik_mockup => 'vector',
+            self::istock => StockTypeEnum::image->value,
+            self::istock_vector => StockTypeEnum::vector->value,
+            self::shutterstock => StockTypeEnum::image->value,
+            self::shutterstock_vector => StockTypeEnum::vector->value,
+            self::freepik => StockTypeEnum::image->value,
+            self::freepik_vector => StockTypeEnum::vector->value,
+            self::freepik_mockup => StockTypeEnum::mockup->value,
         };
     }
 
