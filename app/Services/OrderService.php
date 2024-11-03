@@ -64,6 +64,29 @@ class OrderService
             throw new Exception($e->getMessage());
         }
     }  
+
+    public function saveHistory($stock_url, $file, $enum){
+        try { 
+            
+            $pattern = $enum->getStockRegex();
+            preg_match($pattern, $stock_url, $matches);
+            
+            if ($matches)
+                $stockName = str_replace('-', ' ', $matches[1]);  
+
+            DownloadHistory::create([
+                'user_id' => Auth::user()->id,
+                'stock_name' => $stockName,
+                'stock_origin' => $enum->getDescription(),
+                'stock_origin_param' => $enum->getStockParam(),
+                'stock_url' => $stock_url, 
+                'date' => Carbon::now(),
+            ]);
+            
+        }catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
     
     #region PRIVATE Download 
     private function getPreviewStockByUrl($url, $stock_param)
@@ -129,32 +152,16 @@ class OrderService
                 if (strpos($body, 'mui-1pzresd-overlayIcon') !== false) {
                     throw new Exception("Este conteúdo é <b>premium, compra somente sob demanda</b>. Caso queira adquirir entre em contato com o suporte. Atenciosamente, equipe Designer Elite."); 
                 }  
-            }
-
-            $userId = Auth::user()->getAuthIdentifier();
-            
-            $getDownloadLimit = UserLimits::where('user_id', $userId)->first();
-
-            if ($getDownloadLimit == null) {
-                throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
-            }
-
-            if ($getDownloadLimit->limit == 0) {
-                throw new Exception("Limite de downloads excedido!");
-            }
-
-            $getDownloadLimit->limit = $getDownloadLimit->limit - 1;
-            $getDownloadLimit->date_time_today = date('Y-m-d H:i:s');
-            $getDownloadLimit->save();
+            } 
 
             return [
                 'status' => true,
                 'imagePath' => 'car-3d-ia.jpg',
-                'id' => null,
+                'save' => true,
             ];
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-    }
+    } 
     #endregion 
 }
