@@ -22,6 +22,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::prefix('sending')->group(function () {
     Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
     Route::post('/stock_teste', [OrderController::class, 'downloadImageByUrl'])->name('sendStocTeste'); 
+    Route::get('/traduzir_teste', [HistoryController::class, 'traduzirTextoTeste'])->name('traduzirTeste'); 
 });
 
 Route::middleware('auth')->group(function () {
