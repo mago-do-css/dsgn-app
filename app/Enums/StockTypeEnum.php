@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 namespace App\Enums;
 
-enum StockTypeFilterEnum: int
-{ 
+enum StockTypeEnum: int
+{
     case image = 0;
     case vector = 1;
     case mockup = 2; 
@@ -20,4 +20,4 @@ enum StockTypeFilterEnum: int
             self::icon => 'psd', 
         };
     }
-} 
+}
