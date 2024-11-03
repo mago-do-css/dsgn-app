@@ -16,18 +16,19 @@ use Carbon\Carbon;
 
 class HistoryService
 {
-    public function getDownloadHistory($request)
+    public function getDownloadHistory($request, $search)
     {
         try {
 
             $getHistory = DownloadHistory::query();
 
             //TODO: criar uma documentação para explicar como usar isso
+            //TODO: alterar nome das variaveis de images para stock
             //obtendo o id do usuário através do middleware que está autenticado
             $getHistory->where('user_id', $request->user()->id);
 
             if (!empty($request->images_origin)) {
-                $getHistory->whereIn('image_origin', array_map(function ($image_bank) {
+                $getHistory->whereIn('stock_origin', array_map(function ($image_bank) {
                     return BancoImagemEnum::from($image_bank)->name;
                 }, $request->images_origin));
             }
@@ -37,6 +38,10 @@ class HistoryService
                 $endDate = Carbon::createFromFormat('d/m/Y', $request->date_end)->format('Y-m-d');
 
                 $getHistory->whereBetween('date', [$startDate, $endDate]);
+            }
+
+            if (!empty($request->search)) {
+                $getHistory->where('stock_name', 'like', '%' . $request->search . '%');
             }
 
             // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
@@ -53,8 +58,8 @@ class HistoryService
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }
-    } 
- 
+    }
+
     public function getPaginationData($lastPage, $page)
     {
         $maxPagePerView = 5;
@@ -77,7 +82,33 @@ class HistoryService
             'startNumber' => $startNumber,
             'endNumber' => $endNumber,
             'previousPage' => max(1, $page - 1),
-            'nextPage' =>min($lastPage, $page + 1),
+            'nextPage' => min($lastPage, $page + 1),
         ];
-    }  
+    }
+
+    #region PRIVATE
+
+    public function translateStockName($search_text)
+    {
+        try {
+            $url = 'https://api.mymemory.translated.net/get';
+            $idiomaOrigem = 'pt';
+            $idiomaDestino = 'en';
+
+            $url = 'https://api.mymemory.translated.net/get?q=' . $search_text . '&langpair=' . $idiomaOrigem . '|' . $idiomaDestino;
+
+            $response = Http::get($url);
+
+            if ($response["responseStatus"] != 200)
+                throw new Exception("Falha ao realizar pesquisa por nome. Tente novamente mais tarde.");
+
+            if ($response["quotaFinished"] == true)
+                throw new Exception("Tradutor esgotado. Entre em contato com o suporte.");
+
+            return $response['responseData']['translatedText'];
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
+    }
+    #endregion
 }

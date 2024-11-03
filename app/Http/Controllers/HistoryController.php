@@ -19,11 +19,14 @@ class HistoryController extends Controller{
     }
     
     public function getImagesByFilter(Request $request){
-
-
         $page = request('page', 1);  
  
-        $getHistory = $this->historyService->getDownloadHistory($request);
+        if(!empty($request->search))
+            $getSearchTranslation = $this->historyService->translateStockName($request->search);
+        else
+            $getSearchTranslation = '';
+
+        $getHistory = $this->historyService->getDownloadHistory($request, $getSearchTranslation);
         $getPaginationData = $this->historyService->getPaginationData($getHistory['lastPage'], $page); 
     
         return view('history', 
@@ -34,7 +37,10 @@ class HistoryController extends Controller{
                 'selectedOptions'=> $getHistory['selectedOptions']
             ]
         );
-
     }
 
+    public function traduzirTextoTeste(Request $request){
+        $texto = 'imagem de teste';
+        return $this->historyService->translateStockName($texto);
+    }
 }
