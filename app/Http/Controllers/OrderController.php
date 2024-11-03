@@ -38,16 +38,16 @@ class OrderController extends Controller
             $getEnum =$this->orderService->requestEnumValidator($request->stock_url); 
 
             $getFile = $this->orderService->downloadValidator($request, $getEnum);
- 
-            if(isset($getFile['save']) && $getFile['save'])
-                $this->orderService->saveHistory($request->stock_url, $getFile, $getEnum);
+  
+            $result = $this->orderService->saveHistory($request->stock_url, $getFile['imagePath'], $getEnum, $getFile['save'], $request->orderCode );
 
             //TODO: retornar o resultado do validator
             //url de teste: https://image.shutterstock.com/image-vector/-250nw-2491646071.jpg
           
             return [
                 'status' => $getFile['status'],
-                'imagePath' => $getFile['imagePath']
+                'imagePath' => $getFile['imagePath'],
+                'orderCode' => $result != null ? $result : null
             ]; 
 
         }catch(Exception $e){

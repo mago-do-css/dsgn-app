@@ -17,9 +17,12 @@ class DownloadHistory extends Model
         'stock_path',// para caso ficar salvo em algum local como o storage
         'stock_name',// // para caso ficar salvo em algum local como o storage
         'stock_origin',
-        'stock_url',
         'stock_origin_param',
-        'date',   
+        'stock_url',
+        'stock_type',
+        'stock_image_preview',
+        'order_code',
+        'date'
     ];
 
     public function user()
