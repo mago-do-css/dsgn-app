@@ -1,11 +1,11 @@
-@props(['content', 'key'])
-<div>
-    <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+@props(['content', 'key']) 
+    {{-- max-w-sm --}}
+    <div class="width-card-history bg-white border border-gray-200 rounded-lg shadow">
         <div class="max-w-[200px] h-[250px]  flex mx-auto items-center">
             <img class=" " src="{{ $content['stock_image_preview'] }}" alt="" /> 
         </div> 
         <div class="p-5">
-            <h5 class="capitalize text-xl font-semibold tracking-tight text-gray-900 dark:text-white">{{ ($content['stock_name'] == null) ? 'Não informado' : $content['stock_name']   }}</h5>
+            <h5 class="capitalize text-[18px] leading-none font-semibold tracking-tight text-gray-900">{{ ($content['stock_name'] == null) ? 'Não informado' : $content['stock_name']   }}</h5>
             </a>
             <div class="flex items-center my-3">
                 <span class=" capitalize bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800">{{ $content['stock_type'] }}</span>
@@ -19,5 +19,9 @@
             </svg>
             </a>
         </div>
-    </div>
-</div>
+    </div> 
+    <style> 
+        .width-card-history{
+            width: calc(1200px / 4);
+        }
+    </style>
