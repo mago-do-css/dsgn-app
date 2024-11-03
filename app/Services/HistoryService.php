@@ -52,6 +52,22 @@ class HistoryService
                 }, $request->stocks_type));
             }
 
+            if (!empty($request->ordernation)) {
+                $getHistory->when(request()->input('ordernation'), function ($query, $ordernation) {
+                    switch ($ordernation) {
+                        case 'order':
+                            $query->orderBy('name', 'asc');
+                            break;
+                        case 'date_max':
+                            $query->orderBy('date', 'desc');
+                            break;
+                        case 'date_min':
+                            $query->orderBy('date', 'asc');
+                            break;
+                    }
+                });
+            }
+
             // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
             $perPage = 12;
             //$getHistory = $getHistory->paginate($perPage); 
@@ -72,6 +88,7 @@ class HistoryService
                 'lastPage' => $lastPage,
                 'selectedOptionsImageBank' => $request->stocks_origin,
                 'selectedOptionsStockType' => $request->stocks_type,
+                'selectedOptionOrdernation' => $request->ordernation,
             ];
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
