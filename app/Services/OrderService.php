@@ -55,7 +55,7 @@ class OrderService
             if ($request->isPreview){
                 $getFile = $this->getPreviewStockByUrl($request->stock_url, $enum->getStockParam());
             }else{
-                $this->getDownloadLimit();
+                $this->validateDownloadLimit();
                 $getFile = $this->getStockByUrl($request->stock_url, $enum->getDescription());
             }
 
@@ -103,10 +103,13 @@ class OrderService
         }
     } 
     
-    public function decreaseDownloadLimit($downloadLimitData){
+    public function decreaseDownloadLimit(){
         try{ 
+            $downloadLimitData = $this->getUserLimitData();
+
             $downloadLimitData->limit = $downloadLimitData->limit - 1;
             $downloadLimitData->date_time_today = date('Y-m-d H:i:s');
+
             $downloadLimitData->save();
         }catch(Exception $e){
             throw new Exception($e->getMessage());
@@ -190,11 +193,9 @@ class OrderService
         }
     } 
 
-    private function getDownloadLimit(){
-        try{
-            $userId = Auth::user()->getAuthIdentifier();
-            
-            $getDownloadLimit = UserLimits::where('user_id', $userId)->first();
+    private function validateDownloadLimit(){
+        try{ 
+            $getDownloadLimit = $this->getUserLimitData();
 
             if ($getDownloadLimit == null) {
                 throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
@@ -207,6 +208,12 @@ class OrderService
         }catch(Exception $e){
             throw new Exception($e->getMessage());
         } 
+    }
+
+    private function getUserLimitData(){
+        $userId = Auth::user()->getAuthIdentifier();
+            
+        return UserLimits::where('user_id', $userId)->first();
     }
     #endregion 
 } 

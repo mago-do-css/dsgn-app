@@ -42,7 +42,7 @@ class OrderController extends Controller
             $result = $this->orderService->saveHistory($request->stock_url, $getFile['imagePath'], $getEnum, $getFile['save'], $request->orderCode );
 
             if($getFile['status'] && $getFile['save'])
-                $this->orderService->decreaseDownloadLimit($getFile); 
+                $this->orderService->decreaseDownloadLimit(); 
           
             return [
                 'status' => $getFile['status'],
