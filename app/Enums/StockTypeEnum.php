@@ -21,4 +21,17 @@ enum StockTypeEnum: int
             self::icon => 'ícone', 
         };
     }
+
+     public static function fromName(string $name): int
+    {
+        return match($name) {
+            'image' => self::image->value,
+            'vector' => self::vector->value,
+            'mockup' => self::mockup->value,
+            'video' => self::video->value,
+            'icon' => self::icon->value,
+            'psd' => self::psd->value,
+            default => false,
+        };
+    }
 }

@@ -130,13 +130,14 @@
                             ],
                         ];
                     @endphp
+                   
                     <ul
                         class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         @foreach ($tiposImagem as $tipo)
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
                                 <div class="flex items-center ps-3">
-                                    <input id="banco-{{ $banco['id'] }}" type="checkbox"
-                                        @if ($selectedOptionsStockType != null && in_array($tipo['id'], $selectedOptionsStockType)) checked @endif value="{{ $banco['id'] }}"
+                                    <input id="banco-{{ $banco['id'] }}" type="checkbox"  
+                                        @if ($selectedOptionsStockType != null && in_array($tipo['id'], $selectedOptionsStockType)) checked @endif value="{{ $tipo['id'] }}"
                                         name="stocks_type[]"
                                         class=" form-control-input w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
 
@@ -144,8 +145,7 @@
                                         class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $tipo['name'] }}</label>
                                 </div>
                             </li>
-                        @endforeach
-                        @dd($selectedOptionOrdernation)
+                        @endforeach 
                     </ul>
                     {{-- end checbox filter advanced --}}
 
@@ -154,13 +154,13 @@
                         class="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white">Ordenação</label>
                     <select id="ordernation" name="ordernation"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option @if ($selectedOptionOrdernation == null) selected @endif>Ordenar por</option>
+                        <option @if ($selectedOptionOrdernation == null) selected @endif disabled>Ordenar por</option>
                         <option @if ($selectedOptionOrdernation == 'order') selected @endif value="order">Ordem Alfabética</option>
                         <option @if ($selectedOptionOrdernation == 'date_max') selected @endif value="date_max">Maior Data</option>
                         <option @if ($selectedOptionOrdernation == 'date_min') selected @endif value="date_min">Menor Data</option>
                     </select>
                     {{--  end ordenation filter --}}
-                    
+
                     <div class="mt-5 flex flex-col">
                         <button type="submit"
                             class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Filtrar</button>

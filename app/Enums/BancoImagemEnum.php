@@ -79,7 +79,7 @@ enum BancoImagemEnum: int
             self::freepik => '/-premium\/(.*?)_/',
         };
     }
-    
+
     //TODO: Ja vou avisando que o shutter vai salvar as imagens como vector pois o código valida um trecho da url
     // para determinar se é imagem ou não
     public function getStockType(): string{
@@ -91,6 +91,24 @@ enum BancoImagemEnum: int
             self::freepik => 'image',
             self::freepik_vector => 'vector',
             self::freepik_mockup => 'vector',
+        };
+    }
+
+    public static function fromName(string $name)
+    {
+        return match ($name) {
+            'istock' => self::istock,
+            'shutterstock' => self::shutterstock,
+            'freepik' => self::freepik,
+            'envato' => self::envato,
+            'motionarray' => self::motionarray,
+            'graphipear' => self::graphipear,
+            'flaticon' => self::flaticon,
+            'istock_vector' => self::istock_vector,
+            'shutterstock_vector' => self::shutterstock_vector,
+            'freepik_vector' => self::freepik_vector,
+            'freepik_mockup' => self::freepik_mockup, 
+            default => null,
         };
     }
 } 

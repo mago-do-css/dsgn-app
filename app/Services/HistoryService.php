@@ -30,7 +30,8 @@ class HistoryService
             if (!empty($request->stocks_origin)) {
 
                 $getHistory->whereIn('stock_origin', array_map(function ($stock) {
-                    return BancoImagemEnum::from($stock)->name;
+                    //return BancoImagemEnum::from($stock);
+                    return BancoImagemEnum::fromName($stock);
                 }, $request->stocks_origin));
             }
 
@@ -48,7 +49,8 @@ class HistoryService
             if (!empty($request->stocks_type)) {
 
                 $getHistory->whereIn('stock_type', array_map(function ($type) {
-                    return StockTypeEnum::from($type)->name;
+                   // return StockTypeEnum::from($type)->value;
+                   return StockTypeEnum::fromName($type);
                 }, $request->stocks_type));
             }
 
