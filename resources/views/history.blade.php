@@ -160,7 +160,7 @@
             </div>
             <div class="w-[1200px] grid grid-rows-3 grid-flow-col gap-4">
                 @foreach ($historyData as $key => $content)
-                    <x-box-image-history :image="$content['image_url']" :imageOrigin="$content['image_origin']" :key="$key" />
+                    <x-box-image-history :image="$content['stock_url']" :imageOrigin="$content['stock_origin']" :key="$key" />
                 @endforeach
             </div>
         </div>

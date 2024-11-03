@@ -54,7 +54,16 @@ class HistoryService
 
             // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
             $perPage = 12;
-            $getHistory = $getHistory->paginate($perPage);
+            //$getHistory = $getHistory->paginate($perPage); 
+            $getHistory = $getHistory->select()->paginate($perPage);
+           
+            //TODO: MELHORAR A PERFORMANCE
+            // Converte o valor de stock_type para a string do enum
+            $getHistory->getCollection()->transform(function ($item) {
+                $item->stock_origin = BancoImagemEnum::from($item->stock_origin)->name;
+                $item->stock_type = StockTypeEnum::from($item->stock_type)->name;
+                return $item;
+            });
 
             $lastPage = $getHistory->lastPage();
 
