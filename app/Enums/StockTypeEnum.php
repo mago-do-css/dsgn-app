@@ -13,11 +13,12 @@ enum StockTypeEnum: int
 
     public function getStockTypeDescription(): string{
         return match($this){ 
-            self::image => 'image',
-            self::vector => 'vector',
+            self::image => 'imagem',
+            self::vector => 'vetor',
             self::mockup => 'mockup',
-            self::video => 'video',
-            self::icon => 'psd', 
+            self::video => 'vídeo',
+            self::psd => 'arquivo psd',
+            self::icon => 'ícone', 
         };
     }
 }

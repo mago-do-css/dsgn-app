@@ -279,7 +279,7 @@ class S01_DownloadHistorySeeder extends Seeder
                 'user_id' => 1,  
                 'stock_type' => $data['type'],
                 'stock_origin' => $data['origin'], 
-                'stock_url' => $data['url'], 
+                'stock_image_preview' => $data['url'], 
                 'date' => Carbon::now()->subDays(rand(1, 15)), // Data aleatória nos últimos 30 dias
             ]);
         }

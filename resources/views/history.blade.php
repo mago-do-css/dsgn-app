@@ -159,7 +159,7 @@
                 </form>
             </div>
             <div>
-                <form class="max-w-2xl mx-auto mb-4" action="{{ route('history', ['page' => 1]) }}"  method="GET">   
+                <form class="w-full mx-auto mb-4" action="{{ route('history', ['page' => 1]) }}"  method="GET">   
                     <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Pesquisar</label>
                     <div class="relative">
                         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -191,7 +191,7 @@
 
                  <div class="w-[1200px] grid grid-rows-3 grid-flow-col gap-4"> 
                 @foreach ($historyData as $key => $content)
-                    <x-box-image-history :image="$content['stock_url']" :imageOrigin="$content['stock_origin']" :key="$key" />
+                    <x-box-image-history :content="$content" :key="$key" />
                 @endforeach
             </div>
             </div>
