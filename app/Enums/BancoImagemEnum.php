@@ -13,6 +13,8 @@ enum BancoImagemEnum: int
     case flaticon = 6;
     case istock_vector = 7;
     case shutterstock_vector = 8;
+    case freepik_vector = 9;
+    case freepik_mockup = 10;
 
      // Método para retornar informações extras
     public function getDescription(): string
@@ -75,6 +77,20 @@ enum BancoImagemEnum: int
             self::shutterstock => '/image-photo\/(.*)-(\d+)/',
             self::shutterstock_vector => '/image-vector\/(.*)-(\d+)/',
             self::freepik => '/-premium\/(.*?)_/',
+        };
+    }
+    
+    //TODO: Ja vou avisando que o shutter vai salvar as imagens como vector pois o código valida um trecho da url
+    // para determinar se é imagem ou não
+    public function getStockType(): string{
+        return match($this){
+            self::istock => 'image',
+            self::istock_vector => 'vector',
+            self::shutterstock => 'image',
+            self::shutterstock_vector => 'vector',
+            self::freepik => 'image',
+            self::freepik_vector => 'vector',
+            self::freepik_mockup => 'vector',
         };
     }
 } 
