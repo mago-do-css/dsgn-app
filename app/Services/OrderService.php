@@ -22,19 +22,17 @@ class OrderService
     public function requestEnumValidator($stock_url)
     {
         try {
-            $code_bancoImage = match (true) {
-                Str::contains($stock_url, 'istockphoto.com') => 0,
-                Str::contains($stock_url, 'shutterstock.com') => 1,
-                Str::contains($stock_url, 'freepik.com') => 2,
-                Str::contains($stock_url, 'elements.envato.com') => 3,
-                Str::contains($stock_url, 'motionarray.com') => 4,
-                Str::contains($stock_url, 'graphicpear.com') => 5,
+            $enum = match (true) {
+                Str::contains($stock_url, 'istockphoto.com') => BancoImagemEnum::istock,
+                Str::contains($stock_url, 'shutterstock.com') => BancoImagemEnum::shutterstock,
+                Str::contains($stock_url, 'freepik.com') => BancoImagemEnum::freepik,
+                Str::contains($stock_url, 'elements.envato.com') => BancoImagemEnum::envato,
+                Str::contains($stock_url, 'motionarray.com') => BancoImagemEnum::motionarray,
+                Str::contains($stock_url, 'graphicpear.com') => BancoImagemEnum::graphipear,
                 default => false,
-            };
+            }; 
 
-            $enum = BancoImagemEnum::tryFrom($code_bancoImage);
-
-            if (!$enum && !$code_bancoImage)
+            if (!$enum)
                 throw new Exception("Url não autenticada. Verifique novamente ou contate o suporte!");
 
             $validatedName = $enum->getDescription();
@@ -79,6 +77,7 @@ class OrderService
                 'stock_name' => $stockName,
                 'stock_origin' => $enum->getDescription(),
                 'stock_origin_param' => $enum->getStockParam(),
+                'stock_type' => $enum->getStockType(),
                 'stock_url' => $stock_url, 
                 'date' => Carbon::now(),
             ]);

@@ -51,34 +51,33 @@
                         $bancoImagem = [
                             [
                                 'name' => 'Shutterstock',
-                                'id' => 1,
+                                'id' => 'shutterstock',
                             ],
                             [
                                 'name' => 'iStock',
-                                'id' => 0,
+                                'id' => 'istock',
                             ],
                             [
                                 'name' => 'Freepik',
-                                'id' => 2,
+                                'id' => 'freepik',
                             ],
                             [
                                 'name' => 'Flaticon',
-                                'id' => 6,
+                                'id' =>'flaticon',
                             ],
                             [
                                 'name' => 'Envato',
-                                'id' => 3,
+                                'id' => 'envato',
                             ],
                             [
                                 'name' => 'Motion Array',
-                                'id' => 4,
+                                'id' => 'motionarray',
                             ],
                             [
                                 'name' => 'Graphic Pear',
-                                'id' => 5,
+                                'id' => 'graphicpear',
                             ]
-                        ];
-
+                        ]; 
                     @endphp
                     <ul
                         class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
@@ -86,9 +85,9 @@
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
                                 <div class="flex items-center ps-3">
                                     <input id="banco-{{ $banco['id'] }}" type="checkbox" 
-                                    @if($selectedOptions != null && in_array($banco['id'], $selectedOptions)) checked @endif
+                                    @if($selectedOptionsImageBank != null && in_array($banco['id'], $selectedOptionsImageBank)) checked @endif
                                         value="{{ $banco['id'] }}"
-                                        name="images_origin[]"
+                                        name="stocks_origin[]"
                                         class=" form-control-input w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
                                         >
                                         
@@ -99,6 +98,59 @@
                         @endforeach
                     </ul>
                     {{-- end checkbox --}}
+                    {{-- chebox filter advanced --}}
+                    <h3 class="mt-4 mb-2 font-semibold text-gray-900 dark:text-white">Tipos de arquivo:</h3>
+                    @php
+                    $tiposImagem = [
+                        [
+                            'name' => 'Todos',
+                            'id' => 'all',
+                        ],
+                        [
+                            'name' => 'Imagens',
+                            'id' => 'image',
+                        ],
+                        [
+                            'name' => 'Vetores',
+                            'id' => 'vector',
+                        ],
+                        [
+                            'name' => 'Mockups',
+                            'id' => 'mockup',
+                        ],
+                        [
+                            'name' => 'Vídeos',
+                            'id' => 'video',
+                        ],
+                        [
+                            'name' => 'Ícones',
+                            'id' => 'icon',
+                        ],
+                        [
+                            'name' => 'PSD',
+                            'id' => 'psd',
+                        ]
+                    ]; 
+                @endphp
+                <ul
+                    class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                    @foreach ($tiposImagem as $tipo)
+                        <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
+                            <div class="flex items-center ps-3">
+                                <input id="banco-{{ $banco['id'] }}" type="checkbox" 
+                                @if($selectedOptionsStockType != null && in_array($tipo['id'], $selectedOptionsStockType)) checked @endif
+                                    value="{{ $banco['id'] }}"
+                                    name="stocks_type[]"
+                                    class=" form-control-input w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
+                                    >
+                                    
+                                <label for="{{ $tipo['name'] . '-' . $tipo['id'] }}"
+                                    class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $tipo['name'] }}</label>
+                            </div>
+                        </li>
+                    @endforeach
+                </ul>
+                    {{-- end checbox filter advanced --}}
                     <div class="mt-5 flex flex-col">
                         <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Filtrar</button>
                         <a href="{{ route('history', ['page' => $page]) }}" type="button" class="text-center py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white   border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700">Limpar Filtros</a>

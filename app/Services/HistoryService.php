@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use App\Enums\BancoImagemEnum;
+use App\Enums\StockTypeEnum;
 use Illuminate\Support\Facades\Auth;
 use App\Models\UserLimits;
 use App\Models\DownloadHistory;
@@ -22,15 +23,15 @@ class HistoryService
 
             $getHistory = DownloadHistory::query();
 
-            //TODO: criar uma documentação para explicar como usar isso
-            //TODO: alterar nome das variaveis de images para stock
+            //TODO: criar uma documentação para explicar como usar isso 
             //obtendo o id do usuário através do middleware que está autenticado
             $getHistory->where('user_id', $request->user()->id);
 
-            if (!empty($request->images_origin)) {
-                $getHistory->whereIn('stock_origin', array_map(function ($image_bank) {
-                    return BancoImagemEnum::from($image_bank)->name;
-                }, $request->images_origin));
+            if (!empty($request->stocks_origin)) {
+
+                $getHistory->whereIn('stock_origin', array_map(function ($stock) {
+                    return BancoImagemEnum::from($stock)->name;
+                }, $request->stocks_origin));
             }
 
             if (!empty($request->date_start) && !empty($request->date_end)) {
@@ -44,6 +45,13 @@ class HistoryService
                 $getHistory->where('stock_name', 'like', '%' . $request->search . '%');
             }
 
+            if (!empty($request->stocks_type)) {
+
+                $getHistory->whereIn('stock_type', array_map(function ($type) {
+                    return StockTypeEnum::from($type)->name;
+                }, $request->stocks_type));
+            }
+
             // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
             $perPage = 12;
             $getHistory = $getHistory->paginate($perPage);
@@ -53,7 +61,8 @@ class HistoryService
             return [
                 'historyData' => $getHistory,
                 'lastPage' => $lastPage,
-                'selectedOptions' => $request->images_origin,
+                'selectedOptionsImageBank' => $request->stocks_origin,
+                'selectedOptionStockType' => $request->stocks_type,
             ];
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
@@ -86,8 +95,7 @@ class HistoryService
         ];
     }
 
-    #region PRIVATE
-
+    #region PRIVATE 
     public function translateStockName($search_text)
     {
         try {

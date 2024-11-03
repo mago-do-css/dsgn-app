@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('stock_url')->nullable();
             $table->string('stock_origin')->nullable();
             $table->string('stock_origin_param')->nullable();
+            $table->string('stock_type')->nullable();
             $table->timestamp('date')->nullable();
         });
     }
