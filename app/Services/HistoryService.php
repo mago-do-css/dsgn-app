@@ -62,7 +62,7 @@ class HistoryService
                 'historyData' => $getHistory,
                 'lastPage' => $lastPage,
                 'selectedOptionsImageBank' => $request->stocks_origin,
-                'selectedOptionStockType' => $request->stocks_type,
+                'selectedOptionsStockType' => $request->stocks_type,
             ];
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
