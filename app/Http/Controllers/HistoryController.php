@@ -10,11 +10,10 @@ use Illuminate\Support\Facades\Http;
 
  
 class HistoryController extends Controller{
-
-    protected $orderService;
+ 
     protected $historyService;
 
-    public function __construct(HistoryService $historyService){ 
+    public function __construct(HistoryService $historyService){  
         $this->historyService = $historyService; 
     }
     
