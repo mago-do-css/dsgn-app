@@ -100,6 +100,8 @@
             <form id="form-shutter-{{ $key }}" class="flex items-center">
                 @csrf
                 <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                <span id="order-code-render-{{ $key }}">
+              </span> 
                 <span
                     class="flex-shrink-0 z-10 inline-flex items-center py-2.5 px-4 text-sm font-medium text-center text-gray-900 bg-gray-100 border border-gray-300 rounded-s-lg ">URL</span>
                 <div class="relative w-full"> <input autocomplete="off" id="stock-url-{{ $key }}" name="stock_url" type="text"
