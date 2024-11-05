@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\HistoryTrait;
 use Exception;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
@@ -17,6 +18,7 @@ use Carbon\Carbon;
 
 class HistoryService
 {
+    use HistoryTrait;
     public function getDownloadHistory($request, $search)
     {
         try {
@@ -49,8 +51,8 @@ class HistoryService
             if (!empty($request->stocks_type)) {
 
                 $getHistory->whereIn('stock_type', array_map(function ($type) {
-                   // return StockTypeEnum::from($type)->value;
-                   return StockTypeEnum::fromName($type);
+                    // return StockTypeEnum::from($type)->value;
+                    return StockTypeEnum::fromName($type);
                 }, $request->stocks_type));
             }
 
@@ -68,13 +70,15 @@ class HistoryService
                             break;
                     }
                 });
-            }
+            } else {
+                $getHistory->orderBy('date', 'desc');
+            };
 
             // Paginação - ajusta o número de itens por página conforme necessário. Por exemplo, 12 itens por página
             $perPage = 12;
             //$getHistory = $getHistory->paginate($perPage); 
             $getHistory = $getHistory->select()->paginate($perPage);
-           
+
             //TODO: MELHORAR A PERFORMANCE
             // Converte o valor de stock_type para a string do enum
             $getHistory->getCollection()->transform(function ($item) {
@@ -121,6 +125,23 @@ class HistoryService
             'previousPage' => max(1, $page - 1),
             'nextPage' => min($lastPage, $page + 1),
         ];
+    }
+
+    public function getLimitInfo()
+    {
+        try {
+            $userLimit = $this->getUserLimitData();
+
+            if ($userLimit == null)
+                throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
+
+            return [
+                'actualLimit' => $userLimit->actual_limit,
+                'totalLimit' => $userLimit->total_limit,
+            ];
+        } catch (Exception $e) {
+            throw new Exception($e->getMessage());
+        }
     }
 
     #region PRIVATE 
