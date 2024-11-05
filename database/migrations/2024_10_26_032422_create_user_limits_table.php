@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('limit');
+            $table->integer('actual_limit');
+            $table->integer('total_limit');
             $table->timestamp('date_time_today')->nullable();
         });
     }
