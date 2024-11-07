@@ -214,18 +214,19 @@
             <x-pagination-history :page="$page" :paginationData="$paginationData" />
         </div>
     </div>
-    <script type="text/javascript">
-        function downloadImage(keyForm) { 
+
+    
+    <script type="text/javascript"> 
+    function downloadImage(keyForm) { 
             //Busca os dados do formulário
             let form = document.querySelector('#form-history-' + keyForm);
             let csrfToken = form.querySelector('input[name="_token"]').value;
             let inputUrl = form.querySelector('input[name="stock_url"]');
             let orderCode = form.querySelector('input[name="order_code"]');
-            let btnForm = form.querySelector('button');
-            
-
+            let btnForm = document.getElementById('button-form-history-' + keyForm);
+             
             //oculta o botão de download
-            btnForm.classList.add("hidden");
+            btnForm.classList.add("hidden"); 
 
             //exibe o gif de loading ao iniciar o processo
             let gifLoading = document.getElementById("gif-loading-" + keyForm);
@@ -240,7 +241,7 @@
             let data = {
                 stock_url: inputUrl.value,
                 isPreview: false,
-                orderCode: orderCode
+                orderCode: orderCode.value ? orderCode.value : null
             }
 
             xhttp.open("POST", actionUrl, true);
@@ -274,10 +275,12 @@
                 console.log(response);
                 if (this.status == 200 && response.status == true) {
                     //exibe o botão de download com a url da imagem
-                    buttonDownloadFinished = form.getElementById('button-download-finished-' + keyForm);
-                    buttonDownloadFinished.setAttribute('href', completeUrl);
-                    buttonDownloadFinished.classList.remove('hidden');
-                    gifLoading.classList.add('hidden');
+                   
+                    let btnDownloadFinished = document.getElementById('btn-download-finish-' + keyForm); 
+                    btnDownloadFinished.classList.remove('hidden');
+                    gifLoading.classList.add('hidden'); 
+                    btnDownloadFinished.setAttribute('href', completeUrl);
+                    btnDownloadFinished.setAttribute('download', imagePath);
                 } else {
                     //exibe o box de alerta
                     let boxAlert = document.getElementById('box-alert-' + keyForm);
@@ -296,7 +299,9 @@
     <script>
         function closeAlert(keyForm) {
             let boxAlert = document.getElementById('box-alert-' + keyForm);
+            let btnForm = document.getElementById('button-form-history-' + keyForm);
             boxAlert.classList.add('hidden');
+            btnForm.classList.remove('hidden');
         }
     </script>
 </x-app-layout>
