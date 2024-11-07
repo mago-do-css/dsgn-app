@@ -16,7 +16,9 @@ Route::get('/teste', function () {
 
 Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');  
-    Route::get('/historico', [HistoryController::class, 'getImagesByFilter'])->name('history');  
+    Route::get('/historico', [HistoryController::class, 'getImagesByFilter'])->name('history'); 
+    Route::get('/user-limit', [HistoryController::class, 'showUserLimit'])->name('userLimit');
+ 
 });
 
 // TODO: VERIFICAR SE É NECESSÁRIO TER A CONFIRMAÇÃO DE EMAIL

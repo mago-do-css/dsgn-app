@@ -11,11 +11,14 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DownloadHistory; 
 use Carbon\Carbon;
 use App\Models\UserLimits;  
+use App\HistoryTrait;
 //use GuzzleHttp\Client;
 //use Illuminate\Validation\Rule;
 
 class OrderService
 {
+    use HistoryTrait;
+
     /**
      * Verifica se as informações da requisição estão válidas; 
      */
@@ -107,7 +110,7 @@ class OrderService
         try{ 
             $downloadLimitData = $this->getUserLimitData();
 
-            $downloadLimitData->limit = $downloadLimitData->limit - 1;
+            $downloadLimitData->actual_limit = $downloadLimitData->actual_limit - 1;
             $downloadLimitData->date_time_today = date('Y-m-d H:i:s');
 
             $downloadLimitData->save();
@@ -201,7 +204,7 @@ class OrderService
                 throw new Exception("Falha ao obter limte de downloads! Contacte o suporte!");
             }
 
-            if ($getDownloadLimit->limit == 0) {
+            if ($getDownloadLimit->actual_limit <= 0) {
                 throw new Exception("Limite de downloads excedido!");
             } 
           
@@ -210,10 +213,11 @@ class OrderService
         } 
     }
 
-    private function getUserLimitData(){
-        $userId = Auth::user()->getAuthIdentifier();
-            
-        return UserLimits::where('user_id', $userId)->first();
-    }
+    // private function getUserLimitData()
+    // {
+    //     $userId = Auth::user()->getAuthIdentifier();
+    //     return UserLimits::where('user_id', $userId)->first();
+    // }
+
     #endregion 
 } 

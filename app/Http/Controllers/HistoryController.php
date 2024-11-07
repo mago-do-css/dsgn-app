@@ -44,4 +44,9 @@ class HistoryController extends Controller{
         $texto = 'imagem de teste';
         return $this->historyService->translateStockName($texto);
     }
+
+    public function showUserLimit()
+    {
+        return $this->historyService->getLimitInfo();
+    }
 }
