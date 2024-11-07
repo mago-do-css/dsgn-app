@@ -14,12 +14,13 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
-                    </x-nav-link> 
+                    </x-nav-link>
                     <x-nav-link :href="route('history')" :active="request()->routeIs('history')">
                         {{ __('Histórico') }}
-                    </x-nav-link> 
-                  
-                    <a class="inline-flex items-center px-1 pt-1   border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out" href="">
+                    </x-nav-link>
+
+                    <a class="inline-flex items-center px-1 pt-1   border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-900 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out"
+                        href="">
                         Favoritos
                     </a>
                 </div>
@@ -27,6 +28,46 @@
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
+                <form id="limitCounter">@csrf<a data-popover-target="popover-bottom" data-popover-placement="bottom"
+                        type="button"
+                        class="text-white cursor-default bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-3 py-2 text-center me-4 mb-2 mt-2 inline-flex items-center">
+                        <!-- SVG Icon on the Left -->
+                        <svg class="w-6 h-6 text-white mr-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                            fill="white" viewBox="0 0 24 24">
+                            <path
+                                d="M13.383 4.076a6.5 6.5 0 0 0-6.887 3.95A5 5 0 0 0 7 18h3v-4a2 2 0 0 1-1.414-3.414l2-2a2 2 0 0 1 2.828 0l2 2A2 2 0 0 1 14 14v4h4a4 4 0 0 0 .988-7.876 6.5 6.5 0 0 0-5.605-6.048Z" />
+                            <path
+                                d="M12.707 9.293a1 1 0 0 0-1.414 0l-2 2a1 1 0 1 0 1.414 1.414l.293-.293V19a1 1 0 1 0 2 0v-6.586l.293.293a1 1 0 0 0 1.414-1.414l-2-2Z" />
+                        </svg>
+                        Limite
+                        <div class="flex ml-1 items-center justify-center min-w-10 h-6">
+                            <svg id="loader" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+                                <circle fill="white" stroke="white" stroke-width="15" r="15" cx="40" cy="100" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: white; --darkreader-inline-stroke: white;">
+                                    <animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate>
+                                </circle>
+                                <circle fill="white" stroke="white" stroke-width="15" r="15" cx="100" cy="100" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: white; --darkreader-inline-stroke: white;">
+                                    <animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate>
+                                </circle>
+                                <circle fill="white" stroke="white" stroke-width="15" r="15" cx="160" cy="100" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" style="--darkreader-inline-fill: white; --darkreader-inline-stroke: white;">
+                                    <animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate>
+                                </circle>
+                            </svg>
+                            <span id="limitDisplay">
+                                <span id="actualLimit"></span>/<span id="totalLimit"></span>
+                            </span>
+                        </div>
+                    </a>
+                </form>
+                <div data-popover id="popover-bottom" role="tooltip"
+                    class="absolute z-10 invisible inline-block w-64 text-sm text-gray-500 transition-opacity duration-300 bg-white border border-gray-200 rounded-lg shadow-sm opacity-0 dark:text-gray-400 dark:border-gray-600 dark:bg-gray-800">
+                    <div class="px-3 py-2 cursor-default">
+                        <p>Este é o seu limite diário de pedido.</p>
+                        <p>Ele é resetado todo dia.</p>
+                    </div>
+                    <div data-popper-arrow></div>
+                </div>
+
+
                 <div class="relative">
                     <!-- Dropdown Button -->
                     <button id="dropdownAvatarNameButton" data-dropdown-toggle="dropdownAvatarName"
@@ -53,13 +94,17 @@
                         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200"
                             aria-labelledby="dropdownAvatarNameButton">
                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Minha Assinatura</a>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Minha
+                                    Assinatura</a>
                             </li>
                             <li>
-                                <a href="{{ route('profile.edit') }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Perfil</a>
+                                <a href="{{ route('profile.edit') }}"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Perfil</a>
                             </li>
                             <li>
-                                <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ajuda</a>
+                                <a href="#"
+                                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Ajuda</a>
                             </li>
                         </ul>
                         <div class="py-2">
@@ -126,3 +171,54 @@
         </div>
     </div>
 </nav>
+<script>
+    document.addEventListener('DOMContentLoaded', limitCounter());
+
+    function limitCounter() {
+        const xhttp = new XMLHttpRequest();
+        const actionUrl = @json(route('userLimit'));
+        let actualLimit = document.getElementById('actualLimit');
+        let totalLimit = document.getElementById('totalLimit');
+        let loader = document.getElementById('loader');
+        let limitDisplay = document.getElementById('limitDisplay');
+        var form = document.getElementById('limitCounter');
+        var token = form.querySelector('input[name="_token"]').value;
+
+        xhttp.open("GET", actionUrl, true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("X-CSRF-TOKEN", token);
+
+        // Exibe o loader e oculta o display do limite
+        loader.classList.remove('hidden');
+        limitDisplay.classList.add('hidden');
+
+        xhttp.onload = function() {
+            let response;
+
+            try {
+                response = JSON.parse(this.responseText);
+            } catch (error) {
+                response = {
+                    status: false,
+                    message: "Resposta do servidor está inválida. Contacte o suporte!"
+                };
+            }
+
+            // Atualiza os valores de limite
+            actualLimit.innerHTML = response.actualLimit;
+            totalLimit.innerHTML = response.totalLimit;
+
+            // Oculta o loader e exibe o display do limite após carregar os dados
+            loader.classList.add('hidden');
+            limitDisplay.classList.remove('hidden');
+        };
+
+        xhttp.onerror = function() {
+            console.error('Erro:' + this.message);
+            loader.classList.add('hidden');
+            limitDisplay.classList.remove('hidden');
+        };
+
+        xhttp.send();
+    }
+</script>

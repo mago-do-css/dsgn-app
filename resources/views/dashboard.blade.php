@@ -153,6 +153,7 @@
 
                         //remove o order code no input 
                         orderCodeSpan.innerHTML = '';
+                        limitCounter();
                     }
                 }else{
                     let responseError = response.message != null ? response.message : 'Erro de servidor';

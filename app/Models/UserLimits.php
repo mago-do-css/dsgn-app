@@ -14,7 +14,8 @@ class UserLimits extends Model
 
     protected $fillable = [
         'user_id',
-        'day_limit',
+        'actual_limit',
+        'total_limit',
         'date_time_today',
     ];
 

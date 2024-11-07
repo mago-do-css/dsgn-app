@@ -2,7 +2,7 @@
 <div class="pb-10 flex items-end sm:px-6 lg:px-8">
     {{-- visualização do arquivo --}}
     <section>
-        <div id="container-file-{{ $key }}"  class="items-center h-[250px] w-[350px] rounded-lg flex p-4 justify-center border border-gray-200 rounded-lg bg-gray-50">
+        <div id="container-file-{{ $key }}"  class="items-center h-[235px] w-[329px] rounded-lg flex p-4 justify-center border border-gray-200 rounded-lg bg-gray-50">
             <span id="content-file-{{ $key }}" class="h-full flex items-center">
                 <img id="content-image-default-{{ $key }}" class=" w-[100px] h-[90px] rounded-lg"
                     src="{{ asset('assets/images/image_blank.png') }}" alt="">
