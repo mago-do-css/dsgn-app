@@ -112,7 +112,7 @@
 
                        //seleciona os botões de confirmação e os exibe
                         let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
-                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm); 
                         
                         buttonFileCardDownload.classList.add("hidden");
                         buttonsCardDownload.classList.remove("hidden");
@@ -132,7 +132,7 @@
                     }else{
                         //realiza a troca do icone do card  de donwload com sucesso!
                         let iconCheckCardDownload = document.getElementById('card-download-icon-check-' + keyForm);
-                        let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm);
+                        let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm); 
     
                         iconCheckCardDownload.classList.remove("hidden"); 
                         iconDownCardDownload.classList.add("hidden");
@@ -147,6 +147,8 @@
                         //disponibiliza o botão de baixar imagem para o pc
                         let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
                         let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                        buttonFileCardDownload.setAttribute('href', completeUrl);
+                        buttonFileCardDownload.setAttribute('download', imagePath);
                         
                         buttonsCardDownload.classList.add("hidden");
                         buttonFileCardDownload.classList.remove("hidden");
