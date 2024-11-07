@@ -130,13 +130,13 @@
                             ],
                         ];
                     @endphp
-                   
+
                     <ul
                         class="w-48 text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                         @foreach ($tiposImagem as $tipo)
                             <li class="w-full border-b border-gray-200 rounded-t-lg dark:border-gray-600">
                                 <div class="flex items-center ps-3">
-                                    <input id="banco-{{ $banco['id'] }}" type="checkbox"  
+                                    <input id="banco-{{ $banco['id'] }}" type="checkbox"
                                         @if ($selectedOptionsStockType != null && in_array($tipo['id'], $selectedOptionsStockType)) checked @endif value="{{ $tipo['id'] }}"
                                         name="stocks_type[]"
                                         class=" form-control-input w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
@@ -145,17 +145,18 @@
                                         class="w-full py-3 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $tipo['name'] }}</label>
                                 </div>
                             </li>
-                        @endforeach 
+                        @endforeach
                     </ul>
                     {{-- end checbox filter advanced --}}
 
-                    {{-- ordenation filter --}} 
+                    {{-- ordenation filter --}}
                     <label for="ordernation"
                         class="block mb-2 mt-3 text-sm font-medium text-gray-900 dark:text-white">Ordenação</label>
                     <select id="ordernation" name="ordernation"
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                         <option @if ($selectedOptionOrdernation == null) selected @endif disabled>Ordenar por</option>
-                        <option @if ($selectedOptionOrdernation == 'order') selected @endif value="order">Ordem Alfabética</option>
+                        <option @if ($selectedOptionOrdernation == 'order') selected @endif value="order">Ordem Alfabética
+                        </option>
                         <option @if ($selectedOptionOrdernation == 'date_max') selected @endif value="date_max">Recente</option>
                         <option @if ($selectedOptionOrdernation == 'date_min') selected @endif value="date_min">Mais Antigo</option>
                     </select>
@@ -167,7 +168,6 @@
                         <a href="{{ route('history', ['page' => $page]) }}" type="button"
                             class="text-center py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white   border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700">Limpar
                             Filtros</a>
-
                     </div>
                 </form>
             </div>
@@ -215,45 +215,33 @@
         </div>
     </div>
 
-    <script type="text/javascript">
-        function downloadImage(keyForm, isPreview) {
+    
+    <script type="text/javascript"> 
+    function downloadImage(keyForm) { 
+            //Busca os dados do formulário
+            let form = document.querySelector('#form-history-' + keyForm);
+            let csrfToken = form.querySelector('input[name="_token"]').value;
+            let inputUrl = form.querySelector('input[name="stock_url"]');
+            let orderCode = form.querySelector('input[name="order_code"]');
+            let btnForm = document.getElementById('button-form-history-' + keyForm);
+             
+            //oculta o botão de download
+            btnForm.classList.add("hidden"); 
 
-            //Seleciona a div que contem as imagens para remover a imagem padrão pois será trocada pela imagem do preview
-            let contentFile = document.getElementById("content-file-" + keyForm);
-            contentFile.innerHTML = '';
-
-            let gifMessage = document.getElementById("gif-message-" + keyForm);
-
-            //Selecionar o container do gif e exibir ele ao iniciar a busca pelo preview
-            let previewContainer = document.getElementById("container-file-gif-" + keyForm);
-            previewContainer.classList.remove('hidden');
-
-            gifMessage.innerHTML = isPreview ? "Carregando Preview..." : "Baixando Imagem...";
+            //exibe o gif de loading ao iniciar o processo
+            let gifLoading = document.getElementById("gif-loading-" + keyForm);
+            gifLoading.classList.remove('hidden');
 
             //Inicia a requisição
             const xhttp = new XMLHttpRequest();
-
+            console.log(inputUrl);
             //Define a rota 
-            const actionUrl = @json(route('sendStock'));
-
-            //Busca os dados do formulário
-            let form = document.querySelector('#form-shutter-' + keyForm);
-
-            let csrfToken = form.querySelector('input[name="_token"]').value;
-            let inputUrl = form.querySelector('input[name="stock_url"]');
-            let btnForm = form.querySelector('button');
-
-            //Desabilita o input e o botão após enviar a url
-            inputUrl.disabled = true;
-            inputUrl.classList.add("bg-gray-300", "border-gray-300");
-
-            btnForm.disabled = true;
-            btnForm.classList.add("bg-gray-500", "border-gray-500");
-
+            const actionUrl = @json(route('sendStock')); 
 
             let data = {
                 stock_url: inputUrl.value,
-                isPreview: isPreview ? true : false,
+                isPreview: false,
+                orderCode: orderCode.value ? orderCode.value : null
             }
 
             xhttp.open("POST", actionUrl, true);
@@ -278,79 +266,28 @@
                     };
                 }
 
-                
-                let imageDefaultHTML ='<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image_blank.png') }}" alt="">';
+                //let imageDefaultHTML = '<img class="w-[150px] h-[120px] rounded-lg" src="{{ asset('assets/images/image_blank.png') }}" alt="">';
 
                 let imagePath = response.imagePath;
                 let baseUrl = "{{ asset('storage/processed_image/') }}";
-                let completeUrl = isPreview ? imagePath : baseUrl + '/' + imagePath;
+                let completeUrl = baseUrl + '/' + imagePath;
 
+                console.log(response);
                 if (this.status == 200 && response.status == true) {
- 
-                    let imagePreview = '<img class="width-image-processed" src="' + completeUrl + '" alt="" />';
-
-                    gifMessage.innerHTML = '';
-                    previewContainer.classList.add('hidden');
-
-                    contentFile.innerHTML = imagePreview;
-
-                    //Exibe o card de confirmar o download
-                    if (isPreview) {
-                        //TODO: Melhorar a função, ao cancelar realizar a troca dos botões e dos textos
-                        //mover esse script para a função cancelDonwlodAfterProcess / downloadFileProcessed
-                        //iago: funções não foram criadas ainda por isso deixei as trocas de texto antes de abrir o modal do preview
-
-                        //seleciona os botões de confirmação e os exibe
-                        let buttonsCardDownload = document.getElementById('card-download-buttons-' + keyForm);
-                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' + keyForm);
-
-                        buttonFileCardDownload.classList.add("hidden");
-                        buttonsCardDownload.classList.remove("hidden");
-
-                        //realiza a troca da mensagem de sucesso
-                        let titleCardDownload = document.getElementById('card-download-title-' + keyForm);
-                        let textCardDownload = document.getElementById('card-download-text-' + keyForm);
-
-                        titleCardDownload.innerHTML = 'Deseja confirmar o pedido do arquivo?';
-                        textCardDownload.innerHTML = 'Clique abaixo para confirmar.';
-
-                        let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
-                        cardConfirmDownload.classList.remove("hidden");
-                    } else {
-                        //realiza a troca do icone do card  de donwload com sucesso!
-                        let iconCheckCardDownload = document.getElementById('card-download-icon-check-' + keyForm);
-                        let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm);
-
-                        iconCheckCardDownload.classList.remove("hidden");
-                        iconDownCardDownload.classList.add("hidden");
-
-                        //realiza a troca da mensagem de sucesso
-                        let titleCardDownload = document.getElementById('card-download-title-' + keyForm);
-                        let textCardDownload = document.getElementById('card-download-text-' + keyForm);
-
-                        titleCardDownload.innerHTML = 'Processamento Concluído!';
-                        textCardDownload.innerHTML =
-                            'Clique no botão abaixo para baixar a imagem para o seu computador.';
-
-                        //disponibiliza o botão de baixar imagem para o pc
-                        let buttonsCardDownload = document.getElementById('card-download-buttons-' + keyForm);
-                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' + keyForm);
-
-                        buttonsCardDownload.classList.add("hidden");
-                        buttonFileCardDownload.classList.remove("hidden");
-                    }
+                    //exibe o botão de download com a url da imagem
+                   
+                    let btnDownloadFinished = document.getElementById('btn-download-finish-' + keyForm); 
+                    btnDownloadFinished.classList.remove('hidden');
+                    gifLoading.classList.add('hidden'); 
+                    btnDownloadFinished.setAttribute('href', completeUrl);
+                    btnDownloadFinished.setAttribute('download', imagePath);
                 } else {
-                    let responseError = response.message != null ? response.message : 'Erro de servidor';
-                    // console.log("Erro:" + responseError);
-
-                    let alertMessage = document.getElementById('box-alert-message-' + keyForm);
-                    alertMessage.innerHTML = responseError;
-
-                    let containerAlert = document.getElementById('container-box-alert-' + keyForm);
-                    containerAlert.classList.remove('hidden');
-
-                    previewContainer.classList.add('hidden');
-                    contentFile.innerHTML = imageDefaultHTML;
+                    //exibe o box de alerta
+                    let boxAlert = document.getElementById('box-alert-' + keyForm);
+                    let alertContent = document.getElementById('alert-message-' + keyForm);
+                    boxAlert.classList.remove('hidden');
+                    alertContent.innerHTML = response.message != null ? response.message : 'Erro de servidor';
+                    gifLoading.classList.add('hidden');
                 }
             }
 
@@ -361,35 +298,10 @@
     </script>
     <script>
         function closeAlert(keyForm) {
-            let form = document.querySelector('#form-shutter-' + keyForm);
-            let inputUrl = form.querySelector('input[name="stock_url"]');
-            let btnForm = form.querySelector('button');
-
-            let containerAlert = document.getElementById('container-box-alert-' + keyForm);
-            containerAlert.classList.add('hidden');
-
-            inputUrl.disabled = false;
-            inputUrl.classList.remove("bg-gray-300", "border-gray-300");
-
-            btnForm.disabled = false;
-            btnForm.classList.remove("bg-gray-500", "border-gray-500");
-        }
-
-        function cancelDownload(keyForm) {
-
-            let form = document.querySelector('#form-shutter-' + keyForm);
-            let inputUrl = form.querySelector('input[name="stock_url"]');
-            let btnForm = form.querySelector('button');
-
-            let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
-            cardConfirmDownload.classList.add("hidden");
-
-            inputUrl.disabled = false;
-            inputUrl.classList.remove("bg-gray-300", "border-gray-300");
-
-            btnForm.disabled = false;
-            btnForm.classList.remove("bg-gray-500", "border-gray-500");
-            inputUrl.value = "";
+            let boxAlert = document.getElementById('box-alert-' + keyForm);
+            let btnForm = document.getElementById('button-form-history-' + keyForm);
+            boxAlert.classList.add('hidden');
+            btnForm.classList.remove('hidden');
         }
     </script>
 </x-app-layout>

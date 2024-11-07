@@ -78,7 +78,12 @@
                                     <button type="button" onclick="cancelDownload({{$key}})" class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 ">Cancelar</button>
                                 </div> 
                             </div>
-                            <button id="card-dowload-button-file-{{$key}}" class="hidden inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">Salvar no meu computador</button>
+                            <a id="card-dowload-button-file-{{$key}}" 
+                            href=""
+                            download=""
+                            class="hidden inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300">
+                            Salvar no meu computador
+                        </a>
                         </div>
                         <button type="button"
                             onclick="cancelDownload({{$key}})"
