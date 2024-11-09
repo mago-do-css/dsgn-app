@@ -53,7 +53,7 @@ class OrderController extends Controller
         }catch(Exception $e){
             return [
                 'status' => false,
-                'message'=> 'Erro: ' . $e->getMessage()
+                'message'=> $e->getMessage()
             ];
         }  
     }

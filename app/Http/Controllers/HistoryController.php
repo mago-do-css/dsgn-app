@@ -18,26 +18,31 @@ class HistoryController extends Controller{
     }
     
     public function getImagesByFilter(Request $request){
-        $page = request('page', 1);  
+        try{
+            $page = request('page', 1);  
  
-        if(!empty($request->search))
+            //coalescing  nul
+            $getSearchTranslation = $request->search ?: null; 
+                
+            if($getSearchTranslation != null)
             $getSearchTranslation = $this->historyService->translateStockName($request->search);
-        else
-            $getSearchTranslation = '';
-
-        $getHistory = $this->historyService->getDownloadHistory($request, $getSearchTranslation);
-        $getPaginationData = $this->historyService->getPaginationData($getHistory['lastPage'], $page); 
     
-        return view('history', 
-            [
-                'historyData' => $getHistory['historyData'],
-                'page' => $page,
-                'paginationData'=> $getPaginationData,
-                'selectedOptionsImageBank'=> $getHistory['selectedOptionsImageBank'],
-                'selectedOptionsStockType' => $getHistory['selectedOptionsStockType'],
-                'selectedOptionOrdernation'=>$getHistory['selectedOptionOrdernation']
-            ]
-        );
+            $getHistory = $this->historyService->getDownloadHistory($request, $getSearchTranslation);
+            $getPaginationData = $this->historyService->getPaginationData($getHistory['lastPage'], $page); 
+        
+            return view('history', 
+                [
+                    'historyData' => $getHistory['historyData'],
+                    'page' => $page,
+                    'paginationData'=> $getPaginationData,
+                    'selectedOptionsImageBank'=> $getHistory['selectedOptionsImageBank'],
+                    'selectedOptionsStockType' => $getHistory['selectedOptionsStockType'],
+                    'selectedOptionOrdernation'=>$getHistory['selectedOptionOrdernation']
+                ]
+            );
+        }catch (Exception $e){
+            throw new Exception($e->getMessage());
+        } 
     }
 
     public function traduzirTextoTeste(Request $request){

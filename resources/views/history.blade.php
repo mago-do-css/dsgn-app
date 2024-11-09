@@ -12,6 +12,7 @@
         <div class=" justify-center sm:px-6 lg:px-8 flex">
             <div class="mr-4">
                 <form id="form-filters" action="{{ route('history', ['page' => 1]) }}" method="GET">
+                    <input type="hidden" name="search" value="{{ request()->query('search') }}">  
                     {{-- date --}}
                     <div id="date-range-picker" datepicker datepicker-format="dd/mm/yyyy" date-rangepicker
                         class="w-48 flex flex-col items-center">
@@ -173,6 +174,21 @@
             </div>
             <div>
                 <form class="w-full mx-auto mb-4" action="{{ route('history', ['page' => 1]) }}" method="GET">
+
+                    {{-- values filtros avançados --}}
+                    @if ($selectedOptionsImageBank != null)
+                    @foreach ($selectedOptionsImageBank as $option)
+                        <input type="hidden" name="stocks_origin[]" value="{{ $option }}">
+                    @endforeach
+                    @endif
+                    @if ($selectedOptionsStockType != null)
+                        @foreach ($selectedOptionsStockType as $type)
+                            <input type="hidden" name="stocks_type[]" value="{{ $type }}">
+                        @endforeach
+                    @endif
+                    <input type="hidden" name="min_date" value="{{ request()->query('min_date') }}">
+                    <input type="hidden" name="max_date" value="{{ request()->query('max_date') }}">
+                    {{-- end values filtros avançados --}} 
                     <label for="default-search"
                         class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Pesquisar</label>
                     <div class="relative">
@@ -183,50 +199,36 @@
                                     stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                             </svg>
                         </div>
-                        @if ($selectedOptionsImageBank != null)
-                            @foreach ($selectedOptionsImageBank as $option)
-                                <input type="hidden" name="stocks_origin[]" value="{{ $option }}">
-                            @endforeach
-                        @endif
-                        @if ($selectedOptionsStockType != null)
-                            @foreach ($selectedOptionsStockType as $type)
-                                <input type="hidden" name="stocks_type[]" value="{{ $type }}">
-                            @endforeach
-                        @endif
-
                         <input type="search" id="default-search"
                             class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="Procure por Mockups, Logos..." required name="search" />
+                            placeholder="Procure por Mockups, Logos..." value="{{ request()->search ?? '' }}" required name="search" />
                         <button type="submit"
                             class="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Pesquisar</button>
                     </div>
                 </form>
-
-                <div class="w-[1200px] grid grid-rows-3 grid-flow-col gap-4">
+                {{-- w-[1200px] grid grid-cols-3 grid-flow-row gap-4 --}}
+                <div class="w-[1200px] grid grid-cols-4 grid-flow-row gap-4">
                     @foreach ($historyData as $key => $content)
                         <x-box-image-history :content="$content" :key="$key" />
                     @endforeach
                 </div>
             </div>
-
         </div>
         <div class="max-w-7xl mx-auto flex justify-center mt-8">
             <x-pagination-history :page="$page" :paginationData="$paginationData" />
         </div>
     </div>
-
-    
-    <script type="text/javascript"> 
-    function downloadImage(keyForm) { 
+    <script type="text/javascript">
+        function downloadImage(keyForm) {
             //Busca os dados do formulário
             let form = document.querySelector('#form-history-' + keyForm);
             let csrfToken = form.querySelector('input[name="_token"]').value;
             let inputUrl = form.querySelector('input[name="stock_url"]');
             let orderCode = form.querySelector('input[name="order_code"]');
             let btnForm = document.getElementById('button-form-history-' + keyForm);
-             
+
             //oculta o botão de download
-            btnForm.classList.add("hidden"); 
+            btnForm.classList.add("hidden");
 
             //exibe o gif de loading ao iniciar o processo
             let gifLoading = document.getElementById("gif-loading-" + keyForm);
@@ -236,7 +238,7 @@
             const xhttp = new XMLHttpRequest();
             console.log(inputUrl);
             //Define a rota 
-            const actionUrl = @json(route('sendStock')); 
+            const actionUrl = @json(route('sendStock'));
 
             let data = {
                 stock_url: inputUrl.value,
@@ -275,9 +277,9 @@
                 console.log(response);
                 if (this.status == 200 && response.status == true) {
                     //exibe o botão de download com a url da imagem 
-                    let btnDownloadFinished = document.getElementById('btn-download-finish-' + keyForm); 
+                    let btnDownloadFinished = document.getElementById('btn-download-finish-' + keyForm);
                     btnDownloadFinished.classList.remove('hidden');
-                    gifLoading.classList.add('hidden'); 
+                    gifLoading.classList.add('hidden');
                     btnDownloadFinished.setAttribute('href', completeUrl);
                     btnDownloadFinished.setAttribute('download', imagePath);
                     limitCounter();
