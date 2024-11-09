@@ -44,9 +44,9 @@
             
             //Busca os dados do formulário
             let form = document.querySelector('#form-shutter-' + keyForm);
-    
             let csrfToken = form.querySelector('input[name="_token"]').value;
             let inputUrl = form.querySelector('input[name="stock_url"]');
+            let orderCode = form.querySelector('input[name="order_code"]');
             let btnForm = form.querySelector('button');
     
             //Desabilita o input e o botão após enviar a url
@@ -60,6 +60,7 @@
             let data = {
                 stock_url : inputUrl.value, 
                 isPreview : isPreview ? true : false, 
+                orderCode : (orderCode != null) ?  orderCode.value : null
             }
     
             xhttp.open("POST", actionUrl, true);
@@ -93,7 +94,9 @@
                 console.log(response);
                 if (this.status == 200 && response.status == true){ 
     
-                    //TODOS: ESTILIZAR A IMAGEM RETORNADA:  class="h-auto w-full flex"  
+                    let orderCodeSpan = document.getElementById('order-code-render-' + keyForm); 
+                    console.log(orderCodeSpan);
+                    let orderCodeInput = '<input type="hidden" id="order-code-' + keyForm + '" name="order_code" value="' + response.orderCode + '">';
                     let imagePreview = '<img class="width-image-processed" src="' + completeUrl + '" alt="" />'; 
                     
                     gifMessage.innerHTML = '';
@@ -109,7 +112,7 @@
 
                        //seleciona os botões de confirmação e os exibe
                         let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
-                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                        let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm); 
                         
                         buttonFileCardDownload.classList.add("hidden");
                         buttonsCardDownload.classList.remove("hidden");
@@ -123,10 +126,13 @@
 
                         let cardConfirmDownload = document.getElementById('container-card-download-' + keyForm);
                         cardConfirmDownload.classList.remove("hidden");
+
+                        //insere o order code no input 
+                        orderCodeSpan.innerHTML = orderCodeInput;
                     }else{
                         //realiza a troca do icone do card  de donwload com sucesso!
                         let iconCheckCardDownload = document.getElementById('card-download-icon-check-' + keyForm);
-                        let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm);
+                        let iconDownCardDownload = document.getElementById('card-download-icon-down-' + keyForm); 
     
                         iconCheckCardDownload.classList.remove("hidden"); 
                         iconDownCardDownload.classList.add("hidden");
@@ -141,9 +147,15 @@
                         //disponibiliza o botão de baixar imagem para o pc
                         let buttonsCardDownload = document.getElementById('card-download-buttons-' +  keyForm);
                         let buttonFileCardDownload = document.getElementById('card-dowload-button-file-' +  keyForm);
+                        buttonFileCardDownload.setAttribute('href', completeUrl);
+                        buttonFileCardDownload.setAttribute('download', imagePath);
                         
                         buttonsCardDownload.classList.add("hidden");
                         buttonFileCardDownload.classList.remove("hidden");
+
+                        //remove o order code no input 
+                        orderCodeSpan.innerHTML = '';
+                        limitCounter();
                     }
                 }else{
                     let responseError = response.message != null ? response.message : 'Erro de servidor';

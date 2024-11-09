@@ -30,6 +30,11 @@
             'image' => 'graphic.png',
             'url' => 'https://nullrefer.site/graphicpear.com/'
         ],
+        [
+            'text' => 'Flaticon',
+            'image' => 'flaticon.png',
+            'url' => 'https://nullrefer.site/flaticon.com/br/'
+        ],
     ];
 @endphp
 <div class="list-none flex-column space-y space-y-4 text-sm font-medium text-gray-500  mb-4 md:mb-0 w-max">

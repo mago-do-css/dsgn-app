@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Route;
@@ -13,15 +14,25 @@ Route::get('/teste', function () {
     return view('dashboardteste');
 })->middleware(['auth', 'verified'])->name('dashboardteste');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::get('/historyteste', function () {
+    return view('historyteste');
+})->middleware(['auth', 'verified'])->name('testehistory');
+
+Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');  
-    Route::get('/historico', [OrderController::class, 'getImagesByFilter'])->name('history');  
+    Route::get('/historico', [HistoryController::class, 'getImagesByFilter'])->name('history'); 
+    Route::get('/user-limit', [HistoryController::class, 'showUserLimit'])->name('userLimit');
+ 
 });
 
+// TODO: VERIFICAR SE É NECESSÁRIO TER A CONFIRMAÇÃO DE EMAIL
+// ['auth', 'verified']
 Route::prefix('sending')->group(function () {
     Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
     Route::post('/stock_teste', [OrderController::class, 'downloadImageByUrl'])->name('sendStocTeste'); 
-});
+    Route::post('/stock_teste', [HistoryController::class, 'getImagesByFilter'])->name('getHistoryTeste'); 
+    Route::get('/traduzir_teste', [HistoryController::class, 'traduzirTextoTeste'])->name('traduzirTeste'); 
+})->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

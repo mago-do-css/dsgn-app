@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
 
         UserLimits::create([ 
             'user_id' => 1,
-            'limit' => 5,
+            'actual_limit' => 5,
+            'total_limit' => 30,
         ]); 
 
         $this->call(
