@@ -274,13 +274,13 @@
 
                 console.log(response);
                 if (this.status == 200 && response.status == true) {
-                    //exibe o botão de download com a url da imagem
-                   
+                    //exibe o botão de download com a url da imagem 
                     let btnDownloadFinished = document.getElementById('btn-download-finish-' + keyForm); 
                     btnDownloadFinished.classList.remove('hidden');
                     gifLoading.classList.add('hidden'); 
                     btnDownloadFinished.setAttribute('href', completeUrl);
                     btnDownloadFinished.setAttribute('download', imagePath);
+                    limitCounter();
                 } else {
                     //exibe o box de alerta
                     let boxAlert = document.getElementById('box-alert-' + keyForm);
