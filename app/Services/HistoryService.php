@@ -19,7 +19,7 @@ use Carbon\Carbon;
 class HistoryService
 {
     use HistoryTrait;
-    public function getDownloadHistory($request, $search)
+    public function getDownloadHistory($request, $translated_texts)
     {
         try {
 
@@ -42,14 +42,17 @@ class HistoryService
                 $endDate = Carbon::createFromFormat('d/m/Y', $request->date_end)->format('Y-m-d');
 
                 $getHistory->whereBetween('date', [$startDate, $endDate]);
-            }
+            } 
 
-            if (!empty($request->search)) {
-                $getHistory->where('stock_name', 'like', '%' . $request->search . '%');
-            }
+            if (!empty($translated_texts)) {
+                $getHistory->where(function ($query) use ($translated_texts) {
+                    foreach ($translated_texts as $text) {
+                        $query->orWhere('stock_name', 'like', '%' . $text . '%');
+                    }
+                });
+            }  
 
-            if (!empty($request->stocks_type)) {
-
+            if (!empty($request->stocks_type)) { 
                 $getHistory->whereIn('stock_type', array_map(function ($type) {
                     // return StockTypeEnum::from($type)->value;
                     return StockTypeEnum::fromName($type);
@@ -154,15 +157,30 @@ class HistoryService
 
             $url = 'https://api.mymemory.translated.net/get?q=' . $search_text . '&langpair=' . $idiomaOrigem . '|' . $idiomaDestino;
 
-            $response = Http::get($url);
+            $response = Http::get($url); 
 
             if ($response["responseStatus"] != 200)
                 throw new Exception("Falha ao realizar pesquisa por nome. Tente novamente mais tarde.");
 
             if ($response["quotaFinished"] == true)
-                throw new Exception("Tradutor esgotado. Entre em contato com o suporte.");
+                throw new Exception("Tradutor esgotado. Entre em contato com o suporte."); 
 
-            return $response['responseData']['translatedText'];
+            //TODO: melhorar a performance, NÃO ME JULGUEM T_T
+            $translatedText = null;
+            if(isset($response['matches'][2])){
+                $translatedText = $response['matches'][2]['translation'];
+            }else if(isset($response['matches'][1])){
+                $translatedText = $response['matches'][1]['translation'];
+            }else if(isset($response['matches'][0])){
+                $translatedText = $response['matches'][0]['translation'];
+            } 
+
+            return [
+                'translatedTextDefault' => $response['responseData']['translatedText'] ? $response['responseData']['translatedText'] : null,
+                'translatedText' => $translatedText
+            ]; 
+                
+                
         } catch (Exception $e) {
             throw new Exception($e->getMessage());
         }

@@ -21,10 +21,11 @@ class HistoryController extends Controller{
         try{
             $page = request('page', 1);  
  
-            if(!empty($request->search))
-                $getSearchTranslation = $this->historyService->translateStockName($request->search);
-            else
-                $getSearchTranslation = '';
+            //coalescing  nul
+            $getSearchTranslation = $request->search ?: null; 
+                
+            if($getSearchTranslation != null)
+            $getSearchTranslation = $this->historyService->translateStockName($request->search);
     
             $getHistory = $this->historyService->getDownloadHistory($request, $getSearchTranslation);
             $getPaginationData = $this->historyService->getPaginationData($getHistory['lastPage'], $page); 

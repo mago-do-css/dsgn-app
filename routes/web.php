@@ -14,6 +14,10 @@ Route::get('/teste', function () {
     return view('dashboardteste');
 })->middleware(['auth', 'verified'])->name('dashboardteste');
 
+Route::get('/historyteste', function () {
+    return view('historyteste');
+})->middleware(['auth', 'verified'])->name('testehistory');
+
 Route::middleware('auth')->group(function () {
     Route::view('/dashboard', 'dashboard')->name('dashboard');  
     Route::get('/historico', [HistoryController::class, 'getImagesByFilter'])->name('history'); 
@@ -26,6 +30,7 @@ Route::middleware('auth')->group(function () {
 Route::prefix('sending')->group(function () {
     Route::post('/stock', [OrderController::class, 'downloadImageByUrl'])->name('sendStock'); 
     Route::post('/stock_teste', [OrderController::class, 'downloadImageByUrl'])->name('sendStocTeste'); 
+    Route::post('/stock_teste', [HistoryController::class, 'getImagesByFilter'])->name('getHistoryTeste'); 
     Route::get('/traduzir_teste', [HistoryController::class, 'traduzirTextoTeste'])->name('traduzirTeste'); 
 })->middleware('auth');
 
