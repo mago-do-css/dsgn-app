@@ -23,7 +23,7 @@ enum BancoImagemEnum: int
         return match($this) {
             self::istock => 'istock',
             self::shutterstock => 'shutterstock',
-            self::freepik => 'freepik',
+            self::freepik => 'freepik premium',
             self::envato => 'envato',
             self::motionarray => 'motionarray',
         };
@@ -71,13 +71,14 @@ enum BancoImagemEnum: int
             self::motionarray => 'motionarray',
         };
     } 
+
     public function getStockRegex(): string{
         return match($this){
             self::istock => '/foto\/(.*)-gm(\d+)/',
             self::istock_vector => '/vetor\/(.*)-gm(\d+)/',
             self::shutterstock => '/image-photo\/(.*)-(\d+)/',
             self::shutterstock_vector => '/image-vector\/(.*)-(\d+)/',
-            self::freepik => '/-premium\/(.*?)_/',
+            self::freepik => '/-premium\/(.*?)_/', 
         };
     }
 

@@ -41,7 +41,11 @@ class OrderService
             $validatedName = $enum->getDescription();
 
             if (!$enum->getVideoCondition() && (Str::contains($stock_url, $enum->getVideoDescription()) || Str::contains($stock_url, "/v%C3%ADdeo/")))
-                throw new Exception($message =  "Vídeos do " . $validatedName . "somente sob demanda. Entre em contato com o suporte!");
+                throw new Exception( "Vídeos do " . $validatedName . "somente sob demanda. Entre em contato com o suporte!"); 
+               
+            if($enum == BancoImagemEnum::freepik && ( Str::contains($stock_url, "-gratis/") || Str::contains($stock_url, "-gratuitas/") || ( Str::contains($stock_url, "-gratuito/")) )){
+            throw new Exception( "O link do arquivo é do tipo gratuito, <b>somente os recursos do <span class='capitalize'>" . $validatedName . "</span></b> são permitidos!"); 
+            }
 
             return $enum;
         } catch (Exception $e) {
