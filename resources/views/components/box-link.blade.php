@@ -145,3 +145,11 @@
     </div>
     {{-- end input --}}
 </div>
+
+<script>
+    document.getElementById('form-shutter-{{ $key }}').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+        }
+    });
+</script>
