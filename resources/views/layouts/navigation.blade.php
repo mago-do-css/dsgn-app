@@ -20,7 +20,7 @@
                     </x-nav-link>
 
                     <a
-                        class="inline-flex items-center px-1 pt-1 cursor-default select-none border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-400 dark:text-gray-100 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
+                        class="inline-flex items-center px-1 pt-1 cursor-default select-none border-indigo-400 dark:border-indigo-600 text-sm font-medium leading-5 text-gray-400 dark:text-gray-600 focus:outline-none focus:border-indigo-700 transition duration-150 ease-in-out">
                         Favoritos
                         <span
                             class="text-white bg-gradient-to-r from-indigo-500 via-violet-600 to-fuchsia-700 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-md shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded text-[10px] px-2 py-0.5 text-center ml-2 me-2 mb-0">EM
@@ -98,7 +98,7 @@
                 <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownAvatarNameButton">
                     <li>
                         <a
-                            class="block px-4 py-2 cursor-default select-none hover:bg-gray-100 text-gray-400 dark:hover:bg-gray-600 dark:hover:text-white">Minha
+                            class="block px-4 py-2 cursor-default select-none hover:bg-gray-100 text-gray-400 dark:hover:bg-gray-600 dark:hover:text-grey-200">Minha
                             Assinatura
                             <span
                                 class="text-white bg-gradient-to-r from-indigo-500 via-violet-600 to-fuchsia-700 focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-md shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded text-[8px] px-2 py-1 text-center ml-1 me-2 mb-0">EM
