@@ -4,7 +4,7 @@
         <ul class="inline-flex -space-x-px text-sm">
             <li>
                 <a onclick="updatePagination({{ $paginationData['previousPage'] }})" 
-                    class="cursor-pointer flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Anterior</a>
+                    class="cursor-pointer flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-e-0 border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white">Anterior</a>
             </li>
             @for ($i = $paginationData['startNumber']; $i <= $paginationData['endNumber']; $i++)
                 <li>
@@ -12,15 +12,15 @@
                         {{-- href="{{ route('history', ['page' => $i]) }}" --}}
                         onclick="updatePagination({{ $i }})"
                         class="cursor-pointer flex items-center justify-center px-3 h-8 leading-tight 
-                          @if ($i == $page) text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 
-                          @else text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 @endif 
+                          @if ($i == $page) text-blue-600 border border-gray-300 dark:bg-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 
+                          @else text-gray-500 bg-white border border-gray-300 dark:bg-gray-500 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white hover:bg-gray-100 hover:text-gray-700 @endif 
                         ">
                         {{ $i }}
                     </a>
                 </li>
             @endfor 
             <li>
-                <a onclick="updatePagination({{ $paginationData['nextPage'] }})"  class=" cursor-pointer flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Próximo</a>
+                <a onclick="updatePagination({{ $paginationData['nextPage'] }})"  class=" cursor-pointer flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-700 dark:border-gray-700 dark:text-gray-200 dark:hover:bg-gray-700 dark:hover:text-white">Próximo</a>
             </li>
         </ul>
     </nav>

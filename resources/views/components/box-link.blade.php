@@ -4,7 +4,7 @@
     <section>
         <div id="container-file-{{ $key }}"  class="items-center h-[235px] w-[329px] rounded-lg flex p-4 justify-center border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-700">
             <span id="content-file-{{ $key }}" class="h-full flex items-center">
-                <img id="content-image-default-{{ $key }}" class=" w-[100px] h-[80px] rounded-lg"
+                <img id="content-image-default-{{ $key }}" class=" w-[170px] h-[100px] rounded-lg"
                     src="{{ asset('assets/images/image_blank.png') }}" alt="">
             </span>
             <div id="container-file-gif-{{ $key }}" class="hidden" role="status">
@@ -61,14 +61,14 @@
                             </svg>
                             <span class="sr-only">Refresh icon</span> --}}
                             <svg id="card-download-icon-check-{{$key}}" class="hidden w-4 h-4 text-gray-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 21 21">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6.072 10.072 2 2 6-4m3.586 4.314.9-.9a2 2 0 0 0 0-2.828l-.9-.9a2 2 0 0 1-.586-1.414V5.072a2 2 0 0 0-2-2H13.8a2 2 0 0 1-1.414-.586l-.9-.9a2 2 0 0 0-2.828 0l-.9.9a2 2 0 0 1-1.414.586H5.072a2 2 0 0 0-2 2v1.272a2 2 0 0 1-.586 1.414l-.9.9a2 2 0 0 0 0 2.828l.9.9a2 2 0 0 1 .586 1.414v1.272a2 2 0 0 0 2 2h1.272a2 2 0 0 1 1.414.586l.9.9a2 2 0 0 0 2.828 0l.9-.9a2 2 0 0 1 1.414-.586h1.272a2 2 0 0 0 2-2V13.8a2 2 0 0 1 .586-1.414Z"></path>
+                                <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m6.072 10.072 2 2 6-4m3.586 4.314.9-.9a2 2 0 0 0 0-2.828l-.9-.9a2 2 0 0 1-.586-1.414V5.072a2 2 0 0 0-2-2H13.8a2 2 0 0 1-1.414-.586l-.9-.9a2 2 0 0 0-2.828 0l-.9.9a2 2 0 0 1-1.414.586H5.072a2 2 0 0 0-2 2v1.272a2 2 0 0 1-.586 1.414l-.9.9a2 2 0 0 0 0 2.828l.9.9a2 2 0 0 1 .586 1.414v1.272a2 2 0 0 0 2 2h1.272a2 2 0 0 1 1.414.586l.9.9a2 2 0 0 0 2.828 0l.9-.9a2 2 0 0 1 1.414-.586h1.272a2 2 0 0 0 2-2V13.8a2 2 0 0 1 .586-1.414Z"></path>
                             </svg>
                             <svg id="card-download-icon-down-{{$key}}" class="w-4 h-4 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 16 18">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 1v11m0 0 4-4m-4 4L4 8m11 4v3a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-3"></path>
                             </svg>
                         </div>
                         <div class="ms-3 text-sm font-normal ">
-                            <span id="card-download-title-{{$key}}" class="mb-1 text-sm font-semibold text-gray-900">Deseja confirmar o pedido do arquivo?</span>
+                            <span id="card-download-title-{{$key}}" class="mb-1 text-sm font-semibold dark:text-white text-gray-900">Deseja confirmar o pedido do arquivo?</span>
                             <div id="card-download-text-{{$key}}" class="mb-2 text-sm font-normal">Clique abaixo para confirmar.</div>
                             <div id="card-download-buttons-{{$key}}" class="grid grid-cols-2 gap-2"> 
                                 <div> 
@@ -100,7 +100,7 @@
             </div>  
             {{-- end exibir confirmação de download --}}
             <div class="mb-2 mt-4 flex justify-between items-center">
-                <label class="text-sm font-medium text-gray-900 dark:text-white">Cole a url do banco de imagem aqui:</label>
+                <label class="text-sm font-medium text-gray-900 dark:text-gray-300">Cole a url do banco de imagem aqui:</label>
             </div>
             <form id="form-shutter-{{ $key }}" class="flex items-center">
                 @csrf
