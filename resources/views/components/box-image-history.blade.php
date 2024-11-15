@@ -4,7 +4,7 @@
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <input type="hidden" name="stock_url" value="{{ $content['stock_url'] }}" id="">
         <input type="hidden" name="order_code" value="{{ $content['order_code'] }}" id="">
-        <div class="width-card-history bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 rounded-lg shadow">
+        <div class="width-card-history bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow">
             <div class="max-w-[200px] h-[250px]  flex mx-auto items-center">
                 <img class=" " src="{{ $content['stock_image_preview'] }}" alt="" /> 
             </div> 
